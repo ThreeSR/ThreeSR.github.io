@@ -8,63 +8,102 @@
 	</body>
 </html> -->
 
+<!-- 2023/10/9: 彩蛋：如果你能通过网页源代码看到我的这句话，我希望你在生活和学术上都一切顺利，一帆风顺~ :) -->
+<!-- 2023/10/9: Easter egg: If you can see this sentence by viewing the source code of my homepage, I wish you all the best in your life and academia ~ :) -->
+
+<!-- 2023/11/8: Get ready to start PhD application. Good luck to me!) -->
+
 <!DOCTYPE htm1>
 <html>
+	<head>
+		<style>
+		.float-left {
+			float: left;
+			margin-right: 20px; /* 添加一些右边距，以便文本不会紧贴图片 */
+		}
+		.clearfix::after {
+			content: "";
+			clear: both;
+			display: table;
+		}
+		</style>
+		<title>Rui Sun</title>
+		<!-- <link rel="icon" type="image/png" href="favicon.png"> -->
+		<link rel="icon" type="image/x-icon" href="fig/Columbia_Engineering.png">
+	</head>
 	<body>
 		<h3>Hello World</h3>
 		<p>
-			My name is Rui Sun. I received my bachelor's degree from <a href="https://en.xidian.edu.cn/">Xidian University</a>. 
+			My name is Rui Sun (Rui is pronounced as Ray). I received my bachelor's degree from <a href="https://en.xidian.edu.cn/">Xidian University</a>. 
 			Then, I received my master's degree from <a href="https://www.columbia.edu/">Columbia University</a> (<a href="https://www.ee.columbia.edu/ms-concentrations">Research Specialization</a>, Advisor: <a href="https://scholar.google.com/citations?user=OMVTRscAAAAJ&hl=en">Prof. Shih-Fu Chang</a>). 
-			My research interests are Vision-Language Multimodal Learning, Computer Vision, and Natural Language Processing.
+			My research interests are Vision-Language Multimodal Learning, Computer Vision, and Natural Language Processing.<br>
+			<br>
+			I am fortunate enough to work with <b>brilliant</b> mentors and advisors. You can find my work experience and their names in <a href="#exp">Experience</a> section.<br>
+			<br>
+			Multimodal Learning is a broad topic, if you would like to know more about what I am doing and what I did, please jump to <a href="#pub">Publication</a> or <a href="#exp">Experience</a> section.
 		</p>
 		<p>
 			<a href="https://github.com/ThreeSR">[GitHub]</a> 
 			<a href="https://www.linkedin.com/in/rui-sun-999717173">[LinkedIn]</a> 
 			<a href="https://www.semanticscholar.org/author/Rui-Sun/2068172926">[Semantic Scholar]</a>
-			<a href="rs4110@columbia.edu">[Email]</a>
+			<a href="rs4110@columbia.edu">[Email]</a><br>
+			I maintain a list of Multimodal Learning papers <a href="https://github.com/ThreeSR/Paper-Reading">HERE</a>. Let's dive into Multimodal Learning together.
 		</p>
-		<h3>Publication</h3>
+		<!-- announcement -->
 		<p>
-			IdealGPT: Iteratively Decomposing Vision and Language Reasoning via Large Language Models<br>
+			<strong style="color: red;">I am actively looking for PhD opportunities(24 Fall) and Research Interns(24 Spring and 24 Summer). If you believe I can be a good fit, please <a href="rs4110@columbia.edu">Email</a> me to let me know. Thanks~</strong>
+		</p>
+		<h3 id="pub">Publication</h3>
+		* denotes equal contribution
+		<p>
+			<!-- <div class="clearfix">
+			<img src="fig/idealgpt.jpg" alt="IdealGPT" style="width: 132px; height: 66px;" class="float-left"><br> -->
+			<img src="fig/idealgpt.jpg" alt="IdealGPT" style="width: 264px; height: 132px;"><br>
+			<b>IdealGPT: Iteratively Decomposing Vision and Language Reasoning via Large Language Models</b><br>
 			Findings of EMNLP 2023 (long)<br>
-			Haoxuan You*, Rui Sun*, Zhecan Wang*, Long Chen, Gengyu Wang, Hammad A. Ayyubi, Kai-Wei Chang, Shih-Fu Chang<br>
+			Haoxuan You*, <strong>Rui Sun*</strong>, Zhecan Wang*, Long Chen, Gengyu Wang, Hammad A. Ayyubi, Kai-Wei Chang, Shih-Fu Chang<br>
 			[<a href="https://arxiv.org/pdf/2305.14985.pdf">Paper</a>][<a href="https://github.com/Hxyou/IdealGPT">Code</a>]<br>
+			<!-- </div> -->
 			<br>
-			UniFine: A Unified and Fine-grained Approach for Zero-shot Vision-Language Understanding<br>
+			<img src="fig/unifine.jpg" alt="UniFine" style="width: 191px; height: 187px;"><br>
+			<b>UniFine: A Unified and Fine-grained Approach for Zero-shot Vision-Language Understanding</b><br>
 			Findings of ACL 2023 (long)<br>
-			Rui Sun*, Zhecan Wang*, Haoxuan You*, Noel Codella, Kai-Wei Chang, Shih-Fu Chang<br>
+			<strong>Rui Sun*</strong>, Zhecan Wang*, Haoxuan You*, Noel Codella, Kai-Wei Chang, Shih-Fu Chang<br>
 			[<a href="https://aclanthology.org/2023.findings-acl.49/">Paper</a>][<a href="https://github.com/ThreeSR/UniFine">Code</a>]<br>
 			<br>
-			Find Someone Who: Visual Commonsense Understanding in Human-Centric Grounding<br>
+			<img src="fig/vcg.jpg" alt="VCG" style="width: 300px; height: 125px;"><br>
+			<b>Find Someone Who: Visual Commonsense Understanding in Human-Centric Grounding</b><br>
 			Findings of EMNLP 2022 (long)<br>
-			Haoxuan You, Rui Sun, Zhecan Wang, Kai-Wei Chang, Shih-Fu Chang<br>
+			Haoxuan You, <strong>Rui Sun</strong>, Zhecan Wang, Kai-Wei Chang, Shih-Fu Chang<br>
 			[<a href="https://aclanthology.org/2022.findings-emnlp.399/">Paper</a>][<a href="https://github.com/Hxyou/HumanCog">Code</a>]<br>
 			<br>
 			<b>Technical Report</b><br>
-			An empirical study of QA-oriented pretraining<br>
-			Rui Sun<br>
+			<img src="fig/second_pretrain.jpg" alt="Second_Pretrain" style="width: 407px; height: 86px;"><br>
+			<b>An empirical study of QA-oriented pretraining</b><br>
+			<strong>Rui Sun</strong><br>
 			[<a href="https://github.com/ThreeSR/QA-Oriented-Pretraining">GitHub Repo</a>]
 		</p>
-		<h3>Experience</h3>
+		<h3 id="exp">Experience</h3>
 		<p>
 			<a href="http://www1.cs.columbia.edu/nlp/index.cgi">Columbia NLP</a>, Research Assistant<br>
 			Advisor: <a href="https://scholar.google.com/citations?user=jee2Dy0AAAAJ&hl=en">Prof. Zhou Yu</a>, Sep 2023 -- Present<br>
-			Currently working on Multimodal Dialog System<br>
+			Currently working on Multimodal Dialog System, Fine-Grained Visual Categorization (FGVC), and Model Editing<br>
 			<br>
 			<a href="https://mitibmwatsonailab.mit.edu/">MIT-IBM Watson AI Lab</a>, Research Assistant<br>
 			Advisor: <a href="https://scholar.google.com/citations?user=QSRdIzAAAAAJ&hl=zh-CN">Dr. Zhenfang Chen</a>, <a href="https://scholar.google.com/citations?user=PTeSCbIAAAAJ">Prof. Chuang Gan</a>, Jun 2023 -- Present<br>
-			Neuro-Symbolic Visual Reasoning (One co-first author paper in submission)<br>
-			<br>
-			<a href="https://rizzolab.org/">Rehab Engineering Alliance & Center Transforming Low Vision, NYU Langone Health</a>, Research Assistant<br>
-			Advisor: <a href="https://scholar.google.com/citations?user=TmPZ5uEAAAAJ&hl=en">Prof. JohnRoss Rizzo</a>, <a href="https://scholar.google.com/citations?user=jee2Dy0AAAAJ&hl=en">Prof. Zhou Yu</a>, Jun 2023 -- Aug 2023<br>
-			Deploy Vision-Language & Large Language Models in wearable devices for Blindness and Low Vision People<br>
+			Neuro-Symbolic Visual Reasoning <b>(One co-first author paper in submission)</b><br>
 			<br>
 			<a href="https://www.ee.columbia.edu/ln/dvmm/">Digital Video and Multimedia (DVMM) Lab, Columbia University</a>, Research Assistant<br>
-			Advisor: <a href="https://scholar.google.com/citations?user=BhysChMAAAAJ&hl=en">Haoxuan You</a>, <a href="https://scholar.google.com/citations?user=uqHPnmgAAAAJ&hl=en">Zhecan Wang</a>, <a href="https://scholar.google.com/citations?user=OMVTRscAAAAJ&hl=en">Prof. Shih-Fu Chang</a>, <a href="https://scholar.google.com/citations?user=fqDBtzYAAAAJ&hl=en">Prof. Kai-Wei Chang</a>, Oct 2021 -- Jun 2023<br>
+			Advisor: <a href="https://scholar.google.com/citations?user=BhysChMAAAAJ&hl=en">Haoxuan You</a>, <a href="https://scholar.google.com/citations?user=uqHPnmgAAAAJ&hl=en">Zhecan Wang</a>, <a href="https://scholar.google.com/citations?user=OMVTRscAAAAJ&hl=en">Prof. Shih-Fu Chang</a>, <a href="https://scholar.google.com/citations?user=fqDBtzYAAAAJ&hl=en">Prof. Kai-Wei Chang</a>, Oct 2021 -- Jun 2023, Oct 2023 -- Present<br>
+			General Vision and Language Understanding Evaluation <b>(Co-authored work will be released soon)</b><br>
 			Large Language Model Aided Visual Reasoning (Findings of EMNLP 2023)<br>
 			Zero-shot Vision-Language Understanding (Findings of ACL 2023)<br>
 			Human-centric Visual Commonsense Grounding Dataset (Findings of EMNLP 2022)<br>
 			Task-oriented Pretraining (Second-stage Pretraining) of Vision-Language Pretrained Models (Technical Report)<br>
+			<br>
+			<a href="https://rizzolab.org/">Rehab Engineering Alliance & Center Transforming Low Vision, NYU Langone Health</a>, Research Assistant<br>
+			Advisor: <a href="https://scholar.google.com/citations?user=TmPZ5uEAAAAJ&hl=en">Prof. JohnRoss Rizzo</a>, <a href="https://scholar.google.com/citations?user=jee2Dy0AAAAJ&hl=en">Prof. Zhou Yu</a>, Jun 2023 -- Aug 2023<br>
+			AI for Social Good: Deploy Vision-Language & Large Language Models in wearable devices for Blindness and Low Vision People (More details can be found in <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2236097&HistoricalAwards=false">this page</a>)<br>
 			<br>
 			<a href="https://isn.xidian.edu.cn/">State Key Laboratory of Integrated Services Networks, Xidian University</a>, Research Assistant<br>
 			Advisor: <a href="https://scholar.google.com/citations?user=mcIEFDMAAAAJ&hl=zh-CN">Prof. Jingwei Xin</a>, <a href="https://scholar.google.com/citations?user=SRBn7oUAAAAJ&hl">Prof. Nannan Wang</a>, Sep 2020 -- Jul 2021<br>
@@ -85,9 +124,11 @@
 			COMS 4995 Neural Networks & Deep Learning, worked with Prof. Richard Zemel, Fall 2022<br>
 			COMS 4732 Computer Vision II, worked with Prof. Carl Vondrick, Spring 2022<br>
 		</p>
-
-<!-- 2023/10/9: 彩蛋：如果你能通过网页源代码看到我的这句话，我希望你在生活和学术上都一切顺利，一帆风顺~ :) -->
-<!-- 2023/10/9: Easter egg: If you can see this sentence by viewing the source code of my homepage, I wish you all the best in your life and academia ~ :) -->
+		<h3>Misc</h3>
+		<p>
+			<img src="fig/23_Fall.jpg" alt="Fall" style="width: 301px; height: 227px;"><br>
+			Riverside Park, New York, NY, 2023 Fall
+		</p>
 <!-- 		<a href='https://clustrmaps.com/site/1bwuf'  title='Visit tracker'><img src='//clustrmaps.com/map_v2.png?cl=ffffff&w=350&t=n&d=CY53cNKmeCLi9H5dBQeh2tIAkA_59a_qE7bYGFcDRrI'/></a> -->
 		<script type='text/javascript' id='clustrmaps' src='//cdn.clustrmaps.com/map_v2.js?cl=ffffff&w=300&t=n&d=CY53cNKmeCLi9H5dBQeh2tIAkA_59a_qE7bYGFcDRrI'></script>
 	</body>
