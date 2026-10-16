@@ -31,6 +31,39 @@
 			max-width: 100%;
 			border-radius: 4px;
 		}
+		img.zoomable {
+			cursor: zoom-in;
+		}
+		#lightbox {
+			position: fixed;
+			inset: 0;
+			z-index: 1000;
+			background: rgba(0, 0, 0, 0.85);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.18s ease;
+			cursor: zoom-out;
+		}
+		#lightbox.open {
+			opacity: 1;
+			pointer-events: auto;
+		}
+		#lightbox img {
+			max-width: 93vw;
+			max-height: 93vh;
+			width: auto;
+			height: auto;
+			border-radius: 6px;
+			box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+			transform: scale(0.96);
+			transition: transform 0.18s ease;
+		}
+		#lightbox.open img {
+			transform: scale(1);
+		}
 		.float-left {
 			float: left;
 			margin-right: 20px; /* 添加一些右边距，以便文本不会紧贴图片 */
@@ -81,5 +114,32 @@
         <a href="index.html">Return</a>
 <!-- 		<a href='https://clustrmaps.com/site/1bwuf'  title='Visit tracker'><img src='//clustrmaps.com/map_v2.png?cl=ffffff&w=350&t=n&d=CY53cNKmeCLi9H5dBQeh2tIAkA_59a_qE7bYGFcDRrI'/></a> -->
 		<script type='text/javascript' id='clustrmaps' src='//cdn.clustrmaps.com/map_v2.js?cl=ffffff&w=300&t=n&d=CY53cNKmeCLi9H5dBQeh2tIAkA_59a_qE7bYGFcDRrI'></script>
+		<!-- Click-to-zoom lightbox: click any photo to enlarge, click anywhere (or press Esc) to dismiss -->
+		<script>
+		(function () {
+			var overlay = document.createElement('div');
+			overlay.id = 'lightbox';
+			var big = document.createElement('img');
+			overlay.appendChild(big);
+			document.body.appendChild(overlay);
+			function close() {
+				overlay.classList.remove('open');
+				document.body.style.overflow = '';
+			}
+			overlay.addEventListener('click', close);
+			document.addEventListener('keydown', function (e) {
+				if (e.key === 'Escape') close();
+			});
+			document.querySelectorAll('img').forEach(function (im) {
+				if (im.closest('a') || im.closest('#lightbox')) return;
+				im.classList.add('zoomable');
+				im.addEventListener('click', function () {
+					big.src = im.src;
+					overlay.classList.add('open');
+					document.body.style.overflow = 'hidden';
+				});
+			});
+		})();
+		</script>
 	</body>
 </html>

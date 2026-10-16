@@ -141,6 +141,40 @@ More news is on the way...
 			max-width: 100%;
 			border-radius: 4px;
 		}
+		/* Click-to-zoom lightbox */
+		img.zoomable {
+			cursor: zoom-in;
+		}
+		#lightbox {
+			position: fixed;
+			inset: 0;
+			z-index: 1000;
+			background: rgba(0, 0, 0, 0.85);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.18s ease;
+			cursor: zoom-out;
+		}
+		#lightbox.open {
+			opacity: 1;
+			pointer-events: auto;
+		}
+		#lightbox img {
+			max-width: 93vw;
+			max-height: 93vh;
+			width: auto;
+			height: auto;
+			border-radius: 6px;
+			box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+			transform: scale(0.96);
+			transition: transform 0.18s ease;
+		}
+		#lightbox.open img {
+			transform: scale(1);
+		}
 		.float-left {
 			float: left;
 			margin-right: 20px; /* 添加一些右边距，以便文本不会紧贴图片 */
@@ -161,6 +195,10 @@ More news is on the way...
 			<!-- My name is Rui Sun (Rui is pronounced as Ray). I am a CS PhD student at <a href="https://web.cs.ucla.edu/~kwchang/">UCLA NLP</a> advised by <a href="https://web.cs.ucla.edu/~kwchang/">Prof. Kai-Wei Chang</a>. I received my master's degree from <a href="https://www.columbia.edu/">Columbia University</a> (<a href="https://www.ee.columbia.edu/ms-concentrations">Research Specialization</a>, Advisor: <a href="https://scholar.google.com/citations?user=OMVTRscAAAAJ&hl=en">Prof. Shih-Fu Chang</a>). 
 			Prior to that, I received my bachelor's degree from <a href="https://en.xidian.edu.cn/">Xidian University</a>, where I worked with <a href="https://scholar.google.com/citations?user=SRBn7oUAAAAJ&hl">Prof. Nannan Wang</a>. -->
 			My name is Rui Sun (Rui is pronounced as Ray). I am a CS PhD student at <a href="https://web.cs.ucla.edu/~kwchang/">UCLA NLP</a> advised by <a href="https://web.cs.ucla.edu/~kwchang/">Prof. Kai-Wei Chang</a>. My experience and research topics can be found in <a href="#exp">Experience</a> section.<br>
+			<br>
+			Recently, I have been mainly working on the full stack of multimodal agents: agent harness design [<a href="https://openvlharness.github.io/">OpenVLHarness</a>], data generation and trajectory synthesis [<a href="https://armap-agent.github.io/">ARMAP</a>, <a href="">UniSearcher</a>], SFT and RL training [<a href="">UniSearcher</a>, <a href="https://armap-agent.github.io/">ARMAP</a>], and inference-time improvement [<a href="https://threesr.github.io/toolsmith/">ToolSmith</a>, <a href="https://armap-agent.github.io/">ARMAP</a>]. My work covers domains including multimodal search agent [<a href="https://openvlharness.github.io/">OpenVLHarness</a>, <a href="">UniSearcher</a>, <a href="https://threesr.github.io/toolsmith/">ToolSmith</a>], agentic text-to-image generation [<a href="">UniSearcher</a>], and computer use & embodied agents [<a href="https://embodied-web-agent.github.io/">Embodied Web Agents</a>, <a href="https://zjunlp.github.io/WorldMind/">WorldMind</a>, <a href="https://armap-agent.github.io/">ARMAP</a>].<br>
+			<br>
+			Eariler, I worked on general vision language understanding and visual commonsense reasoning [<a href="">IdealGPT</a>, <a href="">GENOME</a>, <a href="">UniFine</a>, <a href="">JourneyBench</a>, <a href="">Visual Commonsense Grounding</a>]. You can find more below.
 			<!-- My research interests are Vision-Language Multimodal Learning, Natural Language Processing, and Computer Vision.<br> -->
 			<!-- <br> -->
 			<!-- I am fortunate enough to work with <b>brilliant</b> mentors and advisors. You can find my work experience and their names in <a href="#exp">Experience</a> section.<br> -->
@@ -179,6 +217,7 @@ More news is on the way...
 			<!-- <strong style="color: red;">I am actively looking for PhD opportunities(24 Fall) and Research Interns(24 Spring and 24 Summer). If you believe I can be a good fit, please <a href="mailto:rs4110@columbia.edu">Email</a> me to let me know. Thanks~</strong> -->
 			<!-- <strong style="color: red;">I am actively looking for PhD opportunities(24 Fall) and Research Interns(24 Spring and 24 Summer). If you believe I can be a good fit, please <a href="mailto:rs4110@columbia.edu">Email</a> me to let me know. Thanks~</strong> -->
 			<!-- <strong style="color: red;">I am actively looking for Research Intern opportunities in 2025. If you believe I can be a good fit, please <a href="mailto:ruis@g.ucla.edu">Email</a> me to let me know. Thanks~</strong> -->
+			<strong style="color: red;">I am actively looking for Research Intern opportunities in 2027. If you believe I can be a good fit, please <a href="mailto:ruis@g.ucla.edu">Email</a> me to let me know. Thanks~</strong>
 		</p>
 		<p>
 			If you would like to know more about me, you could view the source code of this webpage for more information. (Right-click the page and select View Page Source)
@@ -193,8 +232,10 @@ More news is on the way...
 			<!-- Last Update: 03/02/2025<br> -->
 			<!-- Last Update: 07/07/2025<br> -->
 			<!-- Last Update: 08/20/2025<br> -->
-			Last Update: 08/21/2026<br>
-			<br><b>News:</b> <u>Two papers are accepted by Findings of EMNLP 2026.</u>
+			<!-- Last Update: 08/21/2026<br> -->
+			Last Update: 10/15/2026<br>
+			<br><b>News:</b> <u>OpenVLHarness is released. Welcome to try it out! [<a href="https://openvlharness.github.io/">Webpage</a>]</u>
+			<!-- <br><b>News:</b> <u>Two papers are accepted by Findings of EMNLP 2026.</u> -->
 			<!-- <br> -->
 			<!-- <b>Recent News (08/2025,09/2025):</b> <br>
 			<br>
@@ -216,17 +257,36 @@ More news is on the way...
 		<br>
 		*, ** denotes equal contribution (co-first and co-second authorship); † denotes correspondence author or equal advising<br>
 		<br>Reverse chronological order<br>
-		<p>
+		<!-- <p>
 			More papers will be released later this year<br>
-		</p>
+		</p> -->
 		<p>
+			<b>UniSearcher: Learning to Search, Understand, and Generate with one Unified Visual Tool Use Agent</b><br>
+			<!-- Will be on Arxiv<br> -->
+			<!-- <strong>Rui Sun</strong>, Ruiyi Zhang, Tian Cao, Zhen Yang, Kai-Wei Chang†, Zhe Gan†<br> -->
+			To be released; Available upon request<br>
+			<!-- [<a href="">Paper</a>]<br> -->
+			<br>
+			<img src="fig/openvlharness_teaser.png" alt="OpenVLHarness" style="width: 800px; max-width: 100%; height: auto;"><br>
+			<b>OpenVLHarness: Real World Visual Agentic Tool-Use with Multimodal Memory</b><br>
+			Arxiv 2026<br>
+			Yu Zhou*, Cheng-Fu Yang*, <strong>Rui Sun*</strong>, Di Wu*, Sibo Peng, Mingyang Zhang, Zhen Yang, Ruiyi Zhang, Nanyun Peng, Zhe Gan†, Kai-Wei Chang†<br>
+			[<a href="">Paper</a>]
+			[<a href="https://openvlharness.github.io/">Project Page</a>][<a href="https://github.com/uclanlp/OpenVLHarness">Code</a>]<br>
+			<br>
 			<img src="fig/tool_smith.png" alt="Tool_Smith" style="width: 370px; max-width: 100%; height: auto;"><br>
 			<b>ToolSmith: An Automatic Tool-Generation Framework for Multimodal Search Agents</b><br>
 			Findings of EMNLP 2026 (long)<br>
 			<strong>Rui Sun</strong>, Junhua Huang, Luca Zancato, Md Mofijul Islam†, Kai-Wei Chang†<br>
-			Will be released with another work, stay tuned.<br>
-			<!-- [<a href="">Paper</a>]
-			[<a href="">Project Page</a>][<a href="">Code</a>]<br> -->
+			<!-- Will be released with another work, stay tuned.<br> -->
+			[<a href="">Paper</a>]
+			[<a href="https://threesr.github.io/toolsmith/">Project Page</a>][<a href="https://github.com/uclanlp/OpenVLHarness">Code</a>]<br>
+			<br>
+			<b>Does Inference-Time Reasoning Really Improve Video Understanding?</b><br>
+			NeurIPS 2026<br>
+			Zhuohao Yu, Yu Zhou, Zhecan Wang, <strong>Rui Sun</strong>, Kai-Wei Chang, Nanyun Peng<br>
+			To be released<br>
+			<!-- [<a href="">Paper</a>]<br> -->
 			<br>
 			<b>Memory as a Controlled Process: Learned Adaptive Memory Management for LLM Agents</b><br>
 			Arxiv 2026<br>
@@ -261,7 +321,7 @@ More news is on the way...
 			<b>ARMAP: Scaling Autonomous Agents via Automatic Reward Modeling And Planning</b><br>
 			ICLR 2025<br>
 			Zhenfang Chen*, Delin Chen*, <strong>Rui Sun*</strong>, Wenjun Liu*, Chuang Gan<br>
-			[<a href="https://arxiv.org/abs/2502.12130">Paper</a>] [<a href="https://github.com/ThreeSR/Awesome-Inference-Time-Scaling">Paper List of Inference/Test Time Scaling/Computing</a>]
+			[<a href="https://arxiv.org/abs/2502.12130">Paper</a>] [<a href="https://github.com/ThreeSR/Awesome-Inference-Time-Scaling">Paper List of Inference/Test Time Scaling/Computing</a> <a href="https://github.com/ThreeSR/Awesome-Inference-Time-Scaling"><img src="https://img.shields.io/github/stars/ThreeSR/Awesome-Inference-Time-Scaling?style=social" alt="GitHub stars" style="height: 17px; width: auto; vertical-align: text-bottom; border-radius: 0;"></a>]
 			[<a href="https://armap-agent.github.io/">Project Page</a>][<a href="https://github.com/heaplax/ARMAP">Code</a>] [<a href="https://x.com/RuiSun94013021/status/1892349398274781263">Twitter</a>]<br>
 			<br>
 			<img src="fig/journey_bench.jpg" alt="JB" style="width: 650px; max-width: 100%; height: auto;"><br>
@@ -328,12 +388,14 @@ More news is on the way...
 			Agent Topology (COLM 2026)<br>
 			Agent Memory Use (Under Review)<br>
 			Embodied Agent Experience Learning (Findings of EMNLP 2026)<br>
+			Video Understanding Analysis (NeurIPS 2026)<br>
 			More are on the way... <br>
 			<br>
 			Apple Foundation Model (AFM) Team <a href="https://machinelearning.apple.com/">(Apple AI/ML)</a>, Research Funding Collaboration and  Research Intern<br>
-			<!-- Advisor & Mentor: <a href="https://scholar.google.com/citations?user=d9s3sbQAAAAJ&hl=en">Dr. Hao Cheng</a>, <a href="https://scholar.google.com/citations?user=u1CNjgwAAAAJ&hl=en">Dr. Baolin Peng</a>, <a href="https://scholar.google.com/citations?user=rPRWQHgAAAAJ&hl=en&authuser=1&oi=ao">Dr. Reuben Tan</a>, <a href="https://scholar.google.com/citations?user=CQ1cqKkAAAAJ&hl=en">Dr. Jianfeng Gao</a>, <a href="https://scholar.google.com/citations?hl=en&user=fqDBtzYAAAAJ">Prof. Kai-Wei Chang</a>, Jun 2025 -- Present<br> -->
+			Mentor & Manager: <a href="https://scholar.google.com/citations?user=-seCWbAAAAAJ&hl=en">Dr. Ruiyi Zhang</a>, <a href="https://scholar.google.com/citations?user=bAx6oTsAAAAJ&hl=en">Dr. Tian Cao</a>, <a href="https://scholar.google.com/citations?user=lhOY0HkAAAAJ&hl=en">Dr. Zhen Yang</a>, <a href="https://scholar.google.com/citations?user=E64XWyMAAAAJ&hl=en">Dr. Zhe Gan</a><br>
 			Dec 2025 - Jun 2026, Jun 2026 -- Present<br>
-			<!-- Memory Use for Computer Use Agent <br> -->
+			Multimodal Harness Design (Under Review)<br>
+			Agentic Unified Model (To be released)<br>
 			<br>
 			<a href="https://aws.amazon.com/ai/generative-ai/">AWS GenAI</a>, Research Funding Collaboration<br>
 			<!-- Advisor & Mentor: <a href="https://scholar.google.com/citations?user=d9s3sbQAAAAJ&hl=en">Dr. Hao Cheng</a>, <a href="https://scholar.google.com/citations?user=u1CNjgwAAAAJ&hl=en">Dr. Baolin Peng</a>, <a href="https://scholar.google.com/citations?user=rPRWQHgAAAAJ&hl=en&authuser=1&oi=ao">Dr. Reuben Tan</a>, <a href="https://scholar.google.com/citations?user=CQ1cqKkAAAAJ&hl=en">Dr. Jianfeng Gao</a>, <a href="https://scholar.google.com/citations?hl=en&user=fqDBtzYAAAAJ">Prof. Kai-Wei Chang</a>, Jun 2025 -- Present<br> -->
@@ -342,16 +404,16 @@ More news is on the way...
 			<br>
 			Microsoft Research, Redmond <a href="https://www.microsoft.com/en-us/research/group/deep-learning-group/">(Deep Learning Group)</a>, Research Intern<br>
 			<!-- Advisor & Mentor: <a href="https://scholar.google.com/citations?user=d9s3sbQAAAAJ&hl=en">Dr. Hao Cheng</a>, <a href="https://scholar.google.com/citations?user=u1CNjgwAAAAJ&hl=en">Dr. Baolin Peng</a>, <a href="https://scholar.google.com/citations?user=rPRWQHgAAAAJ&hl=en&authuser=1&oi=ao">Dr. Reuben Tan</a>, <a href="https://scholar.google.com/citations?user=CQ1cqKkAAAAJ&hl=en">Dr. Jianfeng Gao</a>, <a href="https://scholar.google.com/citations?hl=en&user=fqDBtzYAAAAJ">Prof. Kai-Wei Chang</a>, Jun 2025 -- Present<br> -->
-			Mentor: <a href="https://scholar.google.com/citations?user=d9s3sbQAAAAJ&hl=en">Dr. Hao Cheng</a>, Jun 2025 -- Sep 2025<br>
+			Mentor & Manager: <a href="https://scholar.google.com/citations?user=d9s3sbQAAAAJ&hl=en">Dr. Hao Cheng</a>, <a href="https://scholar.google.com/citations?user=CQ1cqKkAAAAJ&hl=en">Dr. Jianfeng Gao</a>, Jun 2025 -- Sep 2025<br>
 			Memory Use for Computer Use Agent <br>
 			<br>
 			<a href="https://mitibmwatsonailab.mit.edu/">MIT-IBM Watson AI Lab</a>, Research Assistant<br>
-			Advisor & Mentor: <a href="https://scholar.google.com/citations?user=QSRdIzAAAAAJ&hl=zh-CN">Dr. Zhenfang Chen</a>, <a href="https://scholar.google.com/citations?user=PTeSCbIAAAAJ">Prof. Chuang Gan</a>, Jun 2023 -- Oct 2024<br>
+			Mentor & Advisor: <a href="https://scholar.google.com/citations?user=QSRdIzAAAAAJ&hl=zh-CN">Dr. Zhenfang Chen</a>, <a href="https://scholar.google.com/citations?user=PTeSCbIAAAAJ">Prof. Chuang Gan</a>, Jun 2023 -- Oct 2024<br>
 			Inference Time Scaling for Language Agent with Monte Carlo Tree Search (ICLR 2025)<br>
 			Neuro-Symbolic Visual Reasoning (ICLR 2024)<br>
 			<br>
 			<a href="https://www.ee.columbia.edu/ln/dvmm/">Digital Video and Multimedia (DVMM) Lab, Columbia University</a>, Research Assistant<br>
-			Advisor & Mentor: <a href="https://scholar.google.com/citations?user=BhysChMAAAAJ&hl=en">Dr. Haoxuan You</a>, <a href="https://scholar.google.com/citations?user=-gtmMpIAAAAJ&hl=zh-CN">Prof. Long Chen</a>, <a href="https://scholar.google.com/citations?user=fqDBtzYAAAAJ&hl=en">Prof. Kai-Wei Chang</a>,<a href="https://scholar.google.com/citations?user=OMVTRscAAAAJ&hl=en">Prof. Shih-Fu Chang</a>, Oct 2021 -- Jun 2023, Oct 2023 -- Jun 2024<br>
+			Mentor & Advisor: <a href="https://scholar.google.com/citations?user=BhysChMAAAAJ&hl=en">Dr. Haoxuan You</a>, <a href="https://scholar.google.com/citations?user=-gtmMpIAAAAJ&hl=zh-CN">Prof. Long Chen</a>, <a href="https://scholar.google.com/citations?user=OMVTRscAAAAJ&hl=en">Prof. Shih-Fu Chang</a>, Oct 2021 -- Jun 2023, Oct 2023 -- Jun 2024<br>
 			Vision and Language Understanding Evaluation (NeurIPS 2024 Datasets and Benchmarks Track)<br>
 			Vision Language Models Hallucination Mitigation (ACM MM 2024)<br>
 			Large Language Model Aided Visual Reasoning (Findings of EMNLP 2023)<br>
@@ -396,6 +458,8 @@ More news is on the way...
 		<h3>Service</h3>
 		<p>
 			<!-- <b>Conference Reviewer</b><br> -->
+			<b>Invited Talk</b><br>
+			Embodied Web Agents: Bridging Physical-Digital Realms for Integrated Agent Intelligence (Invited Talk at USC ISI Natural Language Group), Feb 2026
 			<b>Reviewer</b><br>
 			NLP: EMNLP, EACL, NAACL, ACL Rolling Review (ARR), ACL<br>
 			AI: AAAI<br>
@@ -430,6 +494,7 @@ More news is on the way...
 			<a href="https://maxinewu5.github.io/">Maxine Wu </a> (co-mentor with Dr. Yining Hong, UCLA Undergraduate Student)<br>
 			<a href="https://alchien22.github.io/"> Alexander Chien </a> (co-mentor with Dr. Yining Hong, UCLA Undergraduate Student -> UCLA CS Master's Student)<br>
 			<a href="https://scholar.google.com/citations?user=b93i-bwAAAAJ&hl=en"> Junhua Huang </a> (UCLA CS Master's Student)<br>
+			<a href="https://scholar.google.com/citations?user=SQB3TgwAAAAJ&hl=en"> Yu-Han Huang </a> (National Taiwan University Undergraduate Student)<br>
 		</p>
 		<strong>Photos</strong><br>
 		<p>
@@ -444,5 +509,32 @@ More news is on the way...
 		</p>
 <!-- 		<a href='https://clustrmaps.com/site/1bwuf'  title='Visit tracker'><img src='//clustrmaps.com/map_v2.png?cl=ffffff&w=350&t=n&d=CY53cNKmeCLi9H5dBQeh2tIAkA_59a_qE7bYGFcDRrI'/></a> -->
 		<script type='text/javascript' id='clustrmaps' src='//cdn.clustrmaps.com/map_v2.js?cl=ffffff&w=300&t=n&d=CY53cNKmeCLi9H5dBQeh2tIAkA_59a_qE7bYGFcDRrI'></script>
+		<!-- Click-to-zoom lightbox: click any figure to enlarge, click anywhere (or press Esc) to dismiss -->
+		<script>
+		(function () {
+			var overlay = document.createElement('div');
+			overlay.id = 'lightbox';
+			var big = document.createElement('img');
+			overlay.appendChild(big);
+			document.body.appendChild(overlay);
+			function close() {
+				overlay.classList.remove('open');
+				document.body.style.overflow = '';
+			}
+			overlay.addEventListener('click', close);
+			document.addEventListener('keydown', function (e) {
+				if (e.key === 'Escape') close();
+			});
+			document.querySelectorAll('img').forEach(function (im) {
+				if (im.closest('a') || im.closest('#lightbox')) return;
+				im.classList.add('zoomable');
+				im.addEventListener('click', function () {
+					big.src = im.src;
+					overlay.classList.add('open');
+					document.body.style.overflow = 'hidden';
+				});
+			});
+		})();
+		</script>
 	</body>
 </html>
