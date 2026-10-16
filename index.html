@@ -103,10 +103,44 @@ More news is on the way...
 2021/09: Start my master's program at Columbia EE
 -->
 
-<!DOCTYPE htm1>
+<!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
+		/* Centered reading column: keeps the page comfortable on wide screens */
+		body {
+			max-width: 920px;
+			margin: 0 auto;
+			padding: 28px 24px 64px;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+			font-size: 16px;
+			line-height: 1.65;
+			color: #24292f;
+			background: #ffffff;
+		}
+		h3 {
+			font-size: 1.35em;
+			margin: 2em 0 0.6em;
+			padding-bottom: 0.3em;
+			border-bottom: 1px solid #e4e7eb;
+		}
+		body > h3:first-of-type {
+			margin-top: 0.4em;
+		}
+		a {
+			color: #0b63c5;
+			text-decoration: none;
+		}
+		a:hover {
+			text-decoration: underline;
+		}
+		/* Safety net: no image may overflow the reading column */
+		img {
+			max-width: 100%;
+			border-radius: 4px;
+		}
 		.float-left {
 			float: left;
 			margin-right: 20px; /* 添加一些右边距，以便文本不会紧贴图片 */
@@ -186,7 +220,7 @@ More news is on the way...
 			More papers will be released later this year<br>
 		</p>
 		<p>
-			<img src="fig/tool_smith.png" alt="Tool_Smith" style="width: 370px; height: 384px;"><br>
+			<img src="fig/tool_smith.png" alt="Tool_Smith" style="width: 370px; max-width: 100%; height: auto;"><br>
 			<b>ToolSmith: An Automatic Tool-Generation Framework for Multimodal Search Agents</b><br>
 			Findings of EMNLP 2026 (long)<br>
 			<strong>Rui Sun</strong>, Junhua Huang, Luca Zancato, Md Mofijul Islam†, Kai-Wei Chang†<br>
@@ -204,7 +238,7 @@ More news is on the way...
 			Eric Hanchen Jiang*, Levina Li*, <strong>Rui Sun</strong>, Xiao Liang, Yubei Li, Yuchen Wu, Haozheng Luo, Hengli Li, Zhi Zhang, Zhaolu Kang, Kai-Wei Chang, Ying Nian Wu<br>
 			[<a href="https://arxiv.org/abs/2604.00344">Paper</a>]<br>
 			<br>
-			<img src="fig/world_mind.png" alt="World_Mind" style="width: 300px; height: 380px;"><br>
+			<img src="fig/world_mind.png" alt="World_Mind" style="width: 300px; max-width: 100%; height: auto;"><br>
 			<b>Aligning Agentic World Models via Knowledgeable Experience Learning</b><br>
 			Findings of EMNLP 2026 (long)<br>
 			Baochang Ren, Yunzhi Yao, <strong>Rui Sun</strong>, Shuofei Qiao, Ningyu Zhang, Huajun Chen<br>
@@ -216,33 +250,33 @@ More news is on the way...
 			Zeliang Zhang, <strong>Rui Sun</strong>, Jiani Liu, Qi Wu, Chenliang Xu<br>
 			[<a href="https://arxiv.org/abs/2604.01514">Paper</a>]<br>
 			<br>
-			<img src="fig/ewa2.png" alt="EWA" style="width: 800px; height: 600px;"><br>
+			<img src="fig/ewa2.png" alt="EWA" style="width: 800px; max-width: 100%; height: auto;"><br>
 			<b>EMBODIED WEB AGENTS: Bridging Physical-Digital Realms for Integrated Agent Intelligence</b><br>
 			NeurIPS 2025 Datasets and Benchmarks Track <b><span style="color: rgb(214, 13, 214);">(Spotlight, Top 3%)</span></b><br>
 			Yining Hong*, <strong>Rui Sun*</strong>, Bingxuan Li**, Xingcheng Yao**, Maxine Wu**, Alexander Chien**, Da Yin, Ying Nian Wu, Zhecan James Wang, Kai-Wei Chang<br>
 			[<a href="https://arxiv.org/abs/2506.15677">Paper</a>]
 			[<a href="https://embodied-web-agent.github.io/">Project Page</a>][<a href="https://github.com/Embodied-Web-Agent/Embodied-Web-Agent">Code</a>] [<a href="https://x.com/yining_hong/status/1935520190994997314">Twitter</a>]<br>
 			<br>
-			<img src="fig/armap.jpg" alt="ARMAP" style="width: 750px; height: 280px;"><br>
+			<img src="fig/armap.jpg" alt="ARMAP" style="width: 750px; max-width: 100%; height: auto;"><br>
 			<b>ARMAP: Scaling Autonomous Agents via Automatic Reward Modeling And Planning</b><br>
 			ICLR 2025<br>
 			Zhenfang Chen*, Delin Chen*, <strong>Rui Sun*</strong>, Wenjun Liu*, Chuang Gan<br>
 			[<a href="https://arxiv.org/abs/2502.12130">Paper</a>] [<a href="https://github.com/ThreeSR/Awesome-Inference-Time-Scaling">Paper List of Inference/Test Time Scaling/Computing</a>]
 			[<a href="https://armap-agent.github.io/">Project Page</a>][<a href="https://github.com/heaplax/ARMAP">Code</a>] [<a href="https://x.com/RuiSun94013021/status/1892349398274781263">Twitter</a>]<br>
 			<br>
-			<img src="fig/journey_bench.jpg" alt="JB" style="width: 650px; height: 300px;"><br>
+			<img src="fig/journey_bench.jpg" alt="JB" style="width: 650px; max-width: 100%; height: auto;"><br>
 			<b>JourneyBench: A Challenging One-Stop Vision-Language Understanding Benchmark of Generated Images</b><br>
 			NeurIPS 2024 Datasets and Benchmarks Track<br>
 			Zhecan Wang*, Junzhang Liu*, Chia-Wei Tang, Hani Alomari, Anushka Sivakumar, <strong>Rui Sun</strong>, Wenhao Li, Md. Atabuzzaman, Hammad Ayyubi, Haoxuan You, Alvi Md Ishmam, Kai-Wei Chang, Shih-Fu Chang, Chris Thomas<br>
 			[<a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/734abb86d3caa949f44da8a093717f61-Abstract-Datasets_and_Benchmarks_Track.html">Paper</a>] [<a href="https://journeybench.github.io/">Project Page</a>][<a href="https://github.com/JourneyBench/JourneyBench">Code</a>] [<a href="https://mp.weixin.qq.com/s/TmjhTEp5BkAoX18aeIms2g">量子位</a>] [<a href="https://x.com/ZCJW2021/status/1866752088077652064">Twitter</a>]<br>
 			<br>
-			<img src="fig/cara.jpg" alt="CARA" style="width: 550px; height: 267px;"><br>
+			<img src="fig/cara.jpg" alt="CARA" style="width: 550px; max-width: 100%; height: auto;"><br>
 			<b>Detecting Multimodal Situations with Insufficient Context and Abstaining from Baseless Predictions</b><br>
 			ACM MM 2024 (long)<br>
 			Junzhang Liu*, Zhecan Wang*, Hammad Ayyubi*, Haoxuan You, Chris Thomas, <strong>Rui Sun</strong>, Shih-Fu Chang, Kai-Wei Chang<br>
 			[<a href="https://arxiv.org/abs/2405.11145">Paper</a>][<a href="https://github.com/JunzhangLiu/CARA">Code</a>]<br>
 			<br>
-			<img src="fig/genome.jpg" alt="GENOME" style="width: 600px; height: 300px;"><br>
+			<img src="fig/genome.jpg" alt="GENOME" style="width: 600px; max-width: 100%; height: auto;"><br>
 			<!-- <video width="320" height="200" controls>
 				<source src="https://drive.google.com/file/d/1MbTWM1QypP-aog15BeO6LxDg346r7f1I/view" type="video/mp4">
 				Your browser doesn't support video label.
@@ -254,32 +288,32 @@ More news is on the way...
 			<!-- </div> -->
 			<br>
 			<!-- <div class="clearfix">
-			<img src="fig/idealgpt.jpg" alt="IdealGPT" style="width: 132px; height: 66px;" class="float-left"><br> -->
-			<img src="fig/idealgpt.jpg" alt="IdealGPT" style="width: 600px; height: 300px;"><br>
+			<img src="fig/idealgpt.jpg" alt="IdealGPT" style="width: 132px; max-width: 100%; height: auto;" class="float-left"><br> -->
+			<img src="fig/idealgpt.jpg" alt="IdealGPT" style="width: 600px; max-width: 100%; height: auto;"><br>
 			<b>IdealGPT: Iteratively Decomposing Vision and Language Reasoning via Large Language Models</b><br>
 			Findings of EMNLP 2023 (long)<br>
 			Haoxuan You*, <strong>Rui Sun*</strong>, Zhecan Wang*, Long Chen, Gengyu Wang, Hammad A. Ayyubi, Kai-Wei Chang, Shih-Fu Chang<br>
 			[<a href="https://aclanthology.org/2023.findings-emnlp.755.pdf">Paper</a>][<a href="https://github.com/Hxyou/IdealGPT">Code</a>]<br>
 			<!-- </div> -->
 			<br>
-			<img src="fig/unifine.jpg" alt="UniFine" style="width: 387px; height: 384px;"><br>
+			<img src="fig/unifine.jpg" alt="UniFine" style="width: 387px; max-width: 100%; height: auto;"><br>
 			<b>UniFine: A Unified and Fine-grained Approach for Zero-shot Vision-Language Understanding</b><br>
 			Findings of ACL 2023 (long)<br>
 			<strong>Rui Sun*</strong>, Zhecan Wang*, Haoxuan You*, Noel Codella, Kai-Wei Chang, Shih-Fu Chang<br>
 			[<a href="https://aclanthology.org/2023.findings-acl.49/">Paper</a>][<a href="https://github.com/ThreeSR/UniFine">Code</a>]<br>
 			<br>
-			<img src="fig/vcg.jpg" alt="VCG" style="width: 700px; height: 300px;"><br>
+			<img src="fig/vcg.jpg" alt="VCG" style="width: 700px; max-width: 100%; height: auto;"><br>
 			<b>Find Someone Who: Visual Commonsense Understanding in Human-Centric Grounding</b><br>
 			Findings of EMNLP 2022 (long)<br>
 			Haoxuan You, <strong>Rui Sun</strong>, Zhecan Wang, Kai-Wei Chang, Shih-Fu Chang<br>
 			[<a href="https://aclanthology.org/2022.findings-emnlp.399/">Paper</a>][<a href="https://github.com/Hxyou/HumanCog">Code</a>]<br>
 			<br><br>
 			<b>Technical Reports</b><br>
-			<img src="fig/second_pretrain.jpg" alt="Second_Pretrain" style="width: 650px; height: 126px;"><br>
+			<img src="fig/second_pretrain.jpg" alt="Second_Pretrain" style="width: 650px; max-width: 100%; height: auto;"><br>
 			<b>An empirical study of QA-oriented pretraining</b><br>
 			<strong>Rui Sun</strong><br>
 			[<a href="https://github.com/ThreeSR/QA-Oriented-Pretraining">GitHub Repo</a>]<br>
-			<img src="fig/llm_accountability.png" alt="LLM Accountability" style="width: 600px; height: 400px;"><br>
+			<img src="fig/llm_accountability.png" alt="LLM Accountability" style="width: 600px; max-width: 100%; height: auto;"><br>
 			<b>A Survey of LLM Accountability in Education, Healthcare, and Human Resources</b><br>
 			Abdolrahim Arjomand, Oscar Granadino Horvath, <strong>Rui Sun†</strong>, Weihan Qu († denotes correspondence author)<br>
 			[<a href="https://drive.google.com/file/d/1OFeQSeKtPY2qTvoGbnxNhq1mDIIENFmD/view?usp=sharing">Report</a>] [<a href="https://drive.google.com/file/d/16TTXbwEEyiYI785MpWzRRbG6eHIcCiDi/view?usp=sharing">Slide</a>]
@@ -340,18 +374,18 @@ More news is on the way...
 			Human Face Frontalization and Hallucination (More details can be found <a href="https://ieeexplore.ieee.org/document/10115425">here</a>)<br>
 		</p>
 		<p>
-			<img src="fig/iip_colorful.png" alt="IIP" style="width: 120px; height: 36px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/dvmm.gif" alt="DVMM" style="width: 128px; height: 36px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/nyu_langone.png" alt="NYU_Langone" style="width: 90px; height: 50px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/mit_ibm.jpg" alt="MIT_IBM" style="width: 50px; height: 50px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/columbia_nlp.jpg" alt="CU_NLP" style="width: 50px; height: 50px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/ucla_nlp.png" alt="UCLA_NLP" style="width: 50px; height: 50px;"><br>
+			<img src="fig/iip_colorful.png" alt="IIP" style="width: 120px; max-width: 100%; height: auto;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/dvmm.gif" alt="DVMM" style="width: 128px; max-width: 100%; height: auto;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/nyu_langone.png" alt="NYU_Langone" style="width: 90px; max-width: 100%; height: auto;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/mit_ibm.jpg" alt="MIT_IBM" style="width: 50px; max-width: 100%; height: auto;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/columbia_nlp.jpg" alt="CU_NLP" style="width: 50px; max-width: 100%; height: auto;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/ucla_nlp.png" alt="UCLA_NLP" style="width: 50px; max-width: 100%; height: auto;"><br>
 		</p>
 		<!-- <p>
-			<img src="fig/xdu.jpg" alt="Xidian" style="width: 50px; height: 50px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/columbia.jpg" alt="Roar Lions!" style="width: 50px; height: 50px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/ucla.png" alt="Go Bruins!" style="width: 50px; height: 50px;"><br>
+			<img src="fig/xdu.jpg" alt="Xidian" style="width: 50px; max-width: 100%; height: auto;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/columbia.jpg" alt="Roar Lions!" style="width: 50px; max-width: 100%; height: auto;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/ucla.png" alt="Go Bruins!" style="width: 50px; max-width: 100%; height: auto;"><br>
 		</p> -->
 		<b>Collaborations</b><br>
 		<p>
-			<img src="fig/microsoft.jpg" alt="Microsoft" style="width: 220px; height: 45px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/aws.png" alt="AWS" style="width: 70x; height: 70px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/apple.svg" alt="Google" style="width: 70x; height: 70px;"><br>
+			<img src="fig/microsoft.jpg" alt="Microsoft" style="width: 220px; max-width: 100%; height: auto;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/aws.png" alt="AWS" style="width: 70x; height: 70px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/apple.svg" alt="Google" style="width: 70x; height: 70px;"><br>
 		</p>
 		<b>Sponsors</b><br>
 		<p>
-			<img src="fig/google_research.jpg" alt="Google" style="width: 220px; height: 120px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/amazon_science.jpg" alt="Amazon" style="width: 220px; height: 120px;"><br>
+			<img src="fig/google_research.jpg" alt="Google" style="width: 220px; max-width: 100%; height: auto;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="fig/amazon_science.jpg" alt="Amazon" style="width: 220px; max-width: 100%; height: auto;"><br>
 		</p>
 		<h3>Honors & Awards</h3>
 		<p>
