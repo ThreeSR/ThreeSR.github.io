@@ -4,6 +4,28 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
+		/* Color tokens: light theme by default, dark theme via the toggle button
+		   (html[data-theme]) or the OS preference when no choice has been made */
+		:root {
+			--bg: #ffffff;
+			--fg: #24292f;
+			--link: #0b63c5;
+			--border: #e4e7eb;
+		}
+		html[data-theme="dark"] {
+			--bg: #0d1117;
+			--fg: #c9d1d9;
+			--link: #58a6ff;
+			--border: #30363d;
+		}
+		@media (prefers-color-scheme: dark) {
+			html:not([data-theme="light"]) {
+				--bg: #0d1117;
+				--fg: #c9d1d9;
+				--link: #58a6ff;
+				--border: #30363d;
+			}
+		}
 		body {
 			max-width: 920px;
 			margin: 0 auto;
@@ -11,18 +33,33 @@
 			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 			font-size: 16px;
 			line-height: 1.65;
-			color: #24292f;
-			background: #ffffff;
+			color: var(--fg);
+			background: var(--bg);
+			transition: background 0.2s ease, color 0.2s ease;
 		}
 		h3 {
 			font-size: 1.35em;
 			margin: 0.4em 0 0.6em;
 			padding-bottom: 0.3em;
-			border-bottom: 1px solid #e4e7eb;
+			border-bottom: 1px solid var(--border);
 		}
 		a {
-			color: #0b63c5;
+			color: var(--link);
 			text-decoration: none;
+		}
+		#theme-toggle {
+			position: fixed;
+			top: 14px;
+			right: 14px;
+			z-index: 1100;
+			width: 38px;
+			height: 38px;
+			border-radius: 50%;
+			border: 1px solid var(--border);
+			background: var(--bg);
+			font-size: 17px;
+			line-height: 1;
+			cursor: pointer;
 		}
 		a:hover {
 			text-decoration: underline;
@@ -77,6 +114,10 @@
 		<title>Rui Sun</title>
 		<!-- <link rel="icon" type="image/png" href="favicon.png"> -->
 		<link rel="icon" type="image/x-icon" href="fig/Columbia_Engineering.png">
+		<!-- Apply the saved theme before first paint to avoid a light flash -->
+		<script>
+		try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+		</script>
 	</head>
 	<body>
 		<h3>Old Photos</h3>
@@ -139,6 +180,33 @@
 					document.body.style.overflow = 'hidden';
 				});
 			});
+		})();
+		</script>
+		<!-- Dark-mode toggle: follows the OS preference until clicked, then remembers the choice -->
+		<script>
+		(function () {
+			var root = document.documentElement;
+			function effective() {
+				var t = root.getAttribute('data-theme');
+				if (t) return t;
+				return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+			}
+			var btn = document.createElement('button');
+			btn.id = 'theme-toggle';
+			btn.setAttribute('aria-label', 'Toggle dark mode');
+			btn.title = 'Toggle dark mode';
+			function paint() {
+				btn.textContent = effective() === 'dark' ? '☀️' : '🌙';
+			}
+			btn.addEventListener('click', function () {
+				var next = effective() === 'dark' ? 'light' : 'dark';
+				root.setAttribute('data-theme', next);
+				try { localStorage.setItem('theme', next); } catch (e) {}
+				paint();
+			});
+			document.body.appendChild(btn);
+			paint();
+			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paint);
 		})();
 		</script>
 	</body>

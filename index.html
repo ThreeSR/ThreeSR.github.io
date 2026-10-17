@@ -109,6 +109,34 @@ More news is on the way...
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
+		/* Color tokens: light theme by default, dark theme via the toggle button
+		   (html[data-theme]) or the OS preference when no choice has been made */
+		:root {
+			--bg: #ffffff;
+			--fg: #24292f;
+			--link: #0b63c5;
+			--border: #e4e7eb;
+			--spotlight: #8b0000;
+			--banner: red;
+		}
+		html[data-theme="dark"] {
+			--bg: #0d1117;
+			--fg: #c9d1d9;
+			--link: #58a6ff;
+			--border: #30363d;
+			--spotlight: #ff7b72;
+			--banner: #ff6b6b;
+		}
+		@media (prefers-color-scheme: dark) {
+			html:not([data-theme="light"]) {
+				--bg: #0d1117;
+				--fg: #c9d1d9;
+				--link: #58a6ff;
+				--border: #30363d;
+				--spotlight: #ff7b72;
+				--banner: #ff6b6b;
+			}
+		}
 		/* Centered reading column: keeps the page comfortable on wide screens */
 		body {
 			max-width: 920px;
@@ -117,21 +145,42 @@ More news is on the way...
 			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 			font-size: 16px;
 			line-height: 1.65;
-			color: #24292f;
-			background: #ffffff;
+			color: var(--fg);
+			background: var(--bg);
+			transition: background 0.2s ease, color 0.2s ease;
 		}
 		h3 {
 			font-size: 1.35em;
 			margin: 2em 0 0.6em;
 			padding-bottom: 0.3em;
-			border-bottom: 1px solid #e4e7eb;
+			border-bottom: 1px solid var(--border);
 		}
 		body > h3:first-of-type {
 			margin-top: 0.4em;
 		}
 		a {
-			color: #0b63c5;
+			color: var(--link);
 			text-decoration: none;
+		}
+		.spotlight {
+			color: var(--spotlight);
+		}
+		.red-banner {
+			color: var(--banner);
+		}
+		#theme-toggle {
+			position: fixed;
+			top: 14px;
+			right: 14px;
+			z-index: 1100;
+			width: 38px;
+			height: 38px;
+			border-radius: 50%;
+			border: 1px solid var(--border);
+			background: var(--bg);
+			font-size: 17px;
+			line-height: 1;
+			cursor: pointer;
 		}
 		a:hover {
 			text-decoration: underline;
@@ -188,17 +237,21 @@ More news is on the way...
 		<title>Rui Sun</title>
 		<!-- <link rel="icon" type="image/png" href="favicon.png"> -->
 		<link rel="icon" type="image/x-icon" href="fig/ucla_nlp.png">
+		<!-- Apply the saved theme before first paint to avoid a light flash -->
+		<script>
+		try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+		</script>
 	</head>
 	<body>
 		<h3>Hello World</h3>
 		<p>
 			<!-- My name is Rui Sun (Rui is pronounced as Ray). I am a CS PhD student at <a href="https://web.cs.ucla.edu/~kwchang/">UCLA NLP</a> advised by <a href="https://web.cs.ucla.edu/~kwchang/">Prof. Kai-Wei Chang</a>. I received my master's degree from <a href="https://www.columbia.edu/">Columbia University</a> (<a href="https://www.ee.columbia.edu/ms-concentrations">Research Specialization</a>, Advisor: <a href="https://scholar.google.com/citations?user=OMVTRscAAAAJ&hl=en">Prof. Shih-Fu Chang</a>). 
 			Prior to that, I received my bachelor's degree from <a href="https://en.xidian.edu.cn/">Xidian University</a>, where I worked with <a href="https://scholar.google.com/citations?user=SRBn7oUAAAAJ&hl">Prof. Nannan Wang</a>. -->
-			My name is Rui Sun (Rui is pronounced as Ray). I am a CS PhD student at <a href="https://web.cs.ucla.edu/~kwchang/">UCLA NLP</a> advised by <a href="https://web.cs.ucla.edu/~kwchang/">Prof. Kai-Wei Chang</a>. My experience and research topics can be found in <a href="#exp">Experience</a> section.<br>
+			My name is Rui Sun (Rui is pronounced as Ray). I am a third-year CS PhD student at <a href="https://web.cs.ucla.edu/~kwchang/">UCLA NLP</a> advised by <a href="https://web.cs.ucla.edu/~kwchang/">Prof. Kai-Wei Chang</a>. My experience and research topics can be found in <a href="#exp">Experience</a> section.<br>
 			<br>
-			Recently, I have been mainly working on the full stack of multimodal agents: agent harness design [<a href="https://openvlharness.github.io/">OpenVLHarness</a>], data generation and trajectory synthesis [<a href="https://armap-agent.github.io/">ARMAP</a>, <a href="">UniSearcher</a>], SFT and RL training [<a href="">UniSearcher</a>, <a href="https://armap-agent.github.io/">ARMAP</a>], and inference-time improvement [<a href="https://threesr.github.io/toolsmith/">ToolSmith</a>, <a href="https://armap-agent.github.io/">ARMAP</a>]. My work covers domains including multimodal search agent [<a href="https://openvlharness.github.io/">OpenVLHarness</a>, <a href="">UniSearcher</a>, <a href="https://threesr.github.io/toolsmith/">ToolSmith</a>], agentic text-to-image generation [<a href="">UniSearcher</a>], and computer use & embodied agents [<a href="https://embodied-web-agent.github.io/">Embodied Web Agents</a>, <a href="https://zjunlp.github.io/WorldMind/">WorldMind</a>, <a href="https://armap-agent.github.io/">ARMAP</a>].<br>
+			Recently, I have been mainly working on the full stack of multimodal agents: benchmark [<a href="https://embodied-web-agent.github.io/">Embodied Web Agents</a>], agent harness design [<a href="https://openvlharness.github.io/">OpenVLHarness</a>], data generation and trajectory synthesis, then SFT and RL training [<a href="">UniSearcher</a>, <a href="https://armap-agent.github.io/">ARMAP</a>], and inference-time improvement [<a href="https://threesr.github.io/toolsmith/">ToolSmith</a>, <a href="https://armap-agent.github.io/">ARMAP</a>, <a href="https://zjunlp.github.io/WorldMind/">WorldMind</a>]. My work covers domains including multimodal search agent [<a href="https://openvlharness.github.io/">OpenVLHarness</a>, <a href="">UniSearcher</a>, <a href="https://threesr.github.io/toolsmith/">ToolSmith</a>], agentic text-to-image generation [<a href="">UniSearcher</a>], and computer use & embodied agents [<a href="https://embodied-web-agent.github.io/">Embodied Web Agents</a>, <a href="https://zjunlp.github.io/WorldMind/">WorldMind</a>, <a href="https://armap-agent.github.io/">ARMAP</a>].<br>
 			<br>
-			Eariler, I worked on general vision language understanding and visual commonsense reasoning [<a href="">IdealGPT</a>, <a href="">GENOME</a>, <a href="">UniFine</a>, <a href="">JourneyBench</a>, <a href="">Visual Commonsense Grounding</a>]. You can find more below.
+			Eariler, I worked on general vision language understanding and visual commonsense reasoning [<a href="https://aclanthology.org/2023.findings-emnlp.755.pdf">IdealGPT</a>, <a href="https://openreview.net/forum?id=MNShbDSxKH">GENOME</a>, <a href="https://aclanthology.org/2023.findings-acl.49/">UniFine</a>, <a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/734abb86d3caa949f44da8a093717f61-Abstract-Datasets_and_Benchmarks_Track.html">JourneyBench</a>, <a href="https://aclanthology.org/2022.findings-emnlp.399/">Visual Commonsense Grounding</a>]. You can find more below.
 			<!-- My research interests are Vision-Language Multimodal Learning, Natural Language Processing, and Computer Vision.<br> -->
 			<!-- <br> -->
 			<!-- I am fortunate enough to work with <b>brilliant</b> mentors and advisors. You can find my work experience and their names in <a href="#exp">Experience</a> section.<br> -->
@@ -214,10 +267,10 @@ More news is on the way...
 		</p>
 		<!-- announcement -->
 		<p>
-			<!-- <strong style="color: red;">I am actively looking for PhD opportunities(24 Fall) and Research Interns(24 Spring and 24 Summer). If you believe I can be a good fit, please <a href="mailto:rs4110@columbia.edu">Email</a> me to let me know. Thanks~</strong> -->
-			<!-- <strong style="color: red;">I am actively looking for PhD opportunities(24 Fall) and Research Interns(24 Spring and 24 Summer). If you believe I can be a good fit, please <a href="mailto:rs4110@columbia.edu">Email</a> me to let me know. Thanks~</strong> -->
-			<!-- <strong style="color: red;">I am actively looking for Research Intern opportunities in 2025. If you believe I can be a good fit, please <a href="mailto:ruis@g.ucla.edu">Email</a> me to let me know. Thanks~</strong> -->
-			<strong style="color: red;">I am actively looking for Research Intern opportunities in 2027. If you believe I can be a good fit, please <a href="mailto:ruis@g.ucla.edu">Email</a> me to let me know. Thanks~</strong>
+			<!-- <strong class="red-banner">I am actively looking for PhD opportunities(24 Fall) and Research Interns(24 Spring and 24 Summer). If you believe I can be a good fit, please <a href="mailto:rs4110@columbia.edu">Email</a> me to let me know. Thanks~</strong> -->
+			<!-- <strong class="red-banner">I am actively looking for PhD opportunities(24 Fall) and Research Interns(24 Spring and 24 Summer). If you believe I can be a good fit, please <a href="mailto:rs4110@columbia.edu">Email</a> me to let me know. Thanks~</strong> -->
+			<!-- <strong class="red-banner">I am actively looking for Research Intern opportunities in 2025. If you believe I can be a good fit, please <a href="mailto:ruis@g.ucla.edu">Email</a> me to let me know. Thanks~</strong> -->
+			<strong class="red-banner">I am actively looking for Research Intern opportunities in 2027. If you believe I can be a good fit, please <a href="mailto:ruis@g.ucla.edu">Email</a> me to let me know. Thanks~</strong>
 		</p>
 		<p>
 			If you would like to know more about me, you could view the source code of this webpage for more information. (Right-click the page and select View Page Source)
@@ -241,7 +294,7 @@ More news is on the way...
 			<!-- <br> -->
 			<!-- <b>Recent News (08/2025,09/2025):</b> <br>
 			<br>
-			<u>One paper on <a href="https://embodied-web-agent.github.io/">Embodied Web Agent</a> is accepted by NeurIPS 2025 Datasets and Benchmarks Track as a <b><span style="color: #8b0000;">Spotlight</span></b> paper.</u> <strong style="color: red;"> This paper concretizes my current research roadmap: a Multimodal Language Agent should be able to tackle tasks in both the digital world and the real world, freely moving between these environments to achieve unified automation. Feel free to have a look at our work!</strong><br>
+			<u>One paper on <a href="https://embodied-web-agent.github.io/">Embodied Web Agent</a> is accepted by NeurIPS 2025 Datasets and Benchmarks Track as a <b><span class="spotlight">Spotlight</span></b> paper.</u> <strong class="red-banner"> This paper concretizes my current research roadmap: a Multimodal Language Agent should be able to tackle tasks in both the digital world and the real world, freely moving between these environments to achieve unified automation. Feel free to have a look at our work!</strong><br>
 			<br>
 			<u>One proposal on Language Agent Security was funded by <a href="https://research.google/programs-and-events/research-scholar-program/recipients/?filtertab=2025">Google Research Scholar Program</a> (led by <a href="https://scholar.google.com/citations?user=16r7ZhsAAAAJ">Prof. Chris Thomas</a>)</u><br>
 			<br>
@@ -299,7 +352,7 @@ More news is on the way...
 			<b>Agent Q-Mix: Selecting the Right Action for LLM Multi-Agent Systems through Reinforcement Learning</b><br>
 			COLM 2026<br>
 			Eric Hanchen Jiang*, Levina Li*, <strong>Rui Sun</strong>, Xiao Liang, Yubei Li, Yuchen Wu, Haozheng Luo, Hengli Li, Zhi Zhang, Zhaolu Kang, Kai-Wei Chang, Ying Nian Wu<br>
-			[<a href="https://arxiv.org/abs/2604.00344">Paper</a>] [<a href="https://github.com/ericjiang18/Agent-Q-Mix">Code</a>]<br>
+			[<a href="https://openreview.net/forum?id=QTehV2Qncq">Paper</a>] [<a href="https://github.com/ericjiang18/Agent-Q-Mix">Code</a>]<br>
 			<br>
 			<img src="fig/world_mind.png" alt="World_Mind" style="width: 300px; max-width: 100%; height: auto;"><br>
 			<b>Aligning Agentic World Models via Knowledgeable Experience Learning</b><br>
@@ -315,16 +368,16 @@ More news is on the way...
 			<br>
 			<img src="fig/ewa2.png" alt="EWA" style="width: 800px; max-width: 100%; height: auto;"><br>
 			<b>EMBODIED WEB AGENTS: Bridging Physical-Digital Realms for Integrated Agent Intelligence</b><br>
-			NeurIPS 2025 Datasets and Benchmarks Track <b><span style="color: #8b0000;">(Spotlight, Top 3%)</span></b><br>
+			NeurIPS 2025 Datasets and Benchmarks Track <b><span class="spotlight">(Spotlight, Top 3%)</span></b><br>
 			Yining Hong*, <strong>Rui Sun*</strong>, Bingxuan Li**, Xingcheng Yao**, Maxine Wu**, Alexander Chien**, Da Yin, Ying Nian Wu, Zhecan James Wang, Kai-Wei Chang<br>
-			[<a href="https://arxiv.org/abs/2506.15677">Paper</a>]
+			[<a href="https://openreview.net/forum?id=8wyCbbzF4Q">Paper</a>]
 			[<a href="https://embodied-web-agent.github.io/">Project Page</a>][<a href="https://github.com/Embodied-Web-Agent/Embodied-Web-Agent">Code</a>] [<a href="https://x.com/yining_hong/status/1935520190994997314">Twitter</a>]<br>
 			<br>
 			<img src="fig/armap.jpg" alt="ARMAP" style="width: 750px; max-width: 100%; height: auto;"><br>
 			<b>ARMAP: Scaling Autonomous Agents via Automatic Reward Modeling And Planning</b><br>
 			ICLR 2025<br>
 			Zhenfang Chen*, Delin Chen*, <strong>Rui Sun*</strong>, Wenjun Liu*, Chuang Gan<br>
-			[<a href="https://arxiv.org/abs/2502.12130">Paper</a>] [<a href="https://github.com/ThreeSR/Awesome-Inference-Time-Scaling">Paper List of Inference/Test Time Scaling/Computing</a> <a href="https://github.com/ThreeSR/Awesome-Inference-Time-Scaling"><img src="https://img.shields.io/github/stars/ThreeSR/Awesome-Inference-Time-Scaling?style=social" alt="GitHub stars" style="height: 17px; width: auto; vertical-align: text-bottom; border-radius: 0;"></a>]
+			[<a href="https://openreview.net/forum?id=womU9cEwcO">Paper</a>] [<a href="https://github.com/ThreeSR/Awesome-Inference-Time-Scaling">Paper List of Inference/Test Time Scaling/Computing</a> <a href="https://github.com/ThreeSR/Awesome-Inference-Time-Scaling"><img src="https://img.shields.io/github/stars/ThreeSR/Awesome-Inference-Time-Scaling?style=social" alt="GitHub stars" style="height: 17px; width: auto; vertical-align: text-bottom; border-radius: 0;"></a>]
 			[<a href="https://armap-agent.github.io/">Project Page</a>][<a href="https://github.com/heaplax/ARMAP">Code</a>] [<a href="https://x.com/RuiSun94013021/status/1892349398274781263">Twitter</a>]<br>
 			<br>
 			<img src="fig/journey_bench.jpg" alt="JB" style="width: 650px; max-width: 100%; height: auto;"><br>
@@ -387,7 +440,7 @@ More news is on the way...
 			Advisor: <a href="https://scholar.google.com/citations?hl=en&user=fqDBtzYAAAAJ">Prof. Kai-Wei Chang</a>, Sep 2024 -- Present<br>
 			<!-- Text-to-Video Generation <br> -->
 			<!-- Multimodal Language Agent (Computer Use Agent and Embodied Agent) <br> -->
-			Embodied Web Agent (Mentor: <a href="https://scholar.google.com/citations?user=PTYxORcAAAAJ">Dr. Yining Hong</a>) (NeurIPS 2025 Datasets and Benchmarks Track <b><span style="color: #8b0000;">(Spotlight)</span></b>)<br>
+			Embodied Web Agent (Mentor: <a href="https://scholar.google.com/citations?user=PTYxORcAAAAJ">Dr. Yining Hong</a>) (NeurIPS 2025 Datasets and Benchmarks Track <b><span class="spotlight">(Spotlight)</span></b>)<br>
 			Agent Topology (COLM 2026)<br>
 			Agent Memory Use (Under Review)<br>
 			Embodied Agent Experience Learning (Findings of EMNLP 2026)<br>
@@ -539,6 +592,33 @@ More news is on the way...
 					document.body.style.overflow = 'hidden';
 				});
 			});
+		})();
+		</script>
+		<!-- Dark-mode toggle: follows the OS preference until clicked, then remembers the choice -->
+		<script>
+		(function () {
+			var root = document.documentElement;
+			function effective() {
+				var t = root.getAttribute('data-theme');
+				if (t) return t;
+				return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+			}
+			var btn = document.createElement('button');
+			btn.id = 'theme-toggle';
+			btn.setAttribute('aria-label', 'Toggle dark mode');
+			btn.title = 'Toggle dark mode';
+			function paint() {
+				btn.textContent = effective() === 'dark' ? '☀️' : '🌙';
+			}
+			btn.addEventListener('click', function () {
+				var next = effective() === 'dark' ? 'light' : 'dark';
+				root.setAttribute('data-theme', next);
+				try { localStorage.setItem('theme', next); } catch (e) {}
+				paint();
+			});
+			document.body.appendChild(btn);
+			paint();
+			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paint);
 		})();
 		</script>
 	</body>
