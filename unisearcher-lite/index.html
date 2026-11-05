@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Introducing UniSearcher Lite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: full-bleed dark hero (aurora glow + live search-graph canvas + stat strip), then a ~70ch reading column.
+   Dark-first; a light variant follows the viewer's theme. Blue = ours, violet/cyan = the aurora accents. */
+:root {
+  color-scheme: dark;
+  --bg: #07080c; --bg-2: #0c0e14; --surface: rgba(255,255,255,0.035); --surface-solid: #11141b;
+  --ink: #f2f4f8; --ink-2: #aab1bf; --ink-3: #6f7787; --line: rgba(255,255,255,0.09);
+  --blue: #6aa8ff; --blue-soft: rgba(106,168,255,0.12); --violet: #9b7bff; --cyan: #4fe3d6; --gold: #f2c46d;
+  --bar-base: #3a404c; --tbd-bg: rgba(242,196,109,0.16); --tbd-ink: #f2c46d;
+  --glow-a: rgba(106,120,255,0.55); --glow-b: rgba(79,227,214,0.35); --glow-c: rgba(155,123,255,0.45);
+  --grid: rgba(255,255,255,0.045);
+  --f-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --f-body: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  color-scheme: light;
+  --bg: #f7f8fb; --bg-2: #eef0f6; --surface: rgba(10,20,50,0.035); --surface-solid: #ffffff;
+  --ink: #0b0d12; --ink-2: #3f4655; --ink-3: #6b7383; --line: rgba(10,20,50,0.10);
+  --blue: #1f5fd1; --blue-soft: rgba(31,95,209,0.09); --violet: #6a4fe0; --cyan: #0e9f94; --gold: #9a6a12;
+  --bar-base: #c4c9d3; --tbd-bg: #fff1cf; --tbd-ink: #7a5500;
+  --glow-a: rgba(90,110,255,0.28); --glow-b: rgba(20,190,180,0.20); --glow-c: rgba(140,100,255,0.22);
+  --grid: rgba(10,20,50,0.05); } }
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f7f8fb; --bg-2: #eef0f6; --surface: rgba(10,20,50,0.035); --surface-solid: #ffffff;
+  --ink: #0b0d12; --ink-2: #3f4655; --ink-3: #6b7383; --line: rgba(10,20,50,0.10);
+  --blue: #1f5fd1; --blue-soft: rgba(31,95,209,0.09); --violet: #6a4fe0; --cyan: #0e9f94; --gold: #9a6a12;
+  --bar-base: #c4c9d3; --tbd-bg: #fff1cf; --tbd-ink: #7a5500;
+  --glow-a: rgba(90,110,255,0.28); --glow-b: rgba(20,190,180,0.20); --glow-c: rgba(140,100,255,0.22);
+  --grid: rgba(10,20,50,0.05); }
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.72; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: var(--blue); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 4px; }
+
+/* ---------- hero ---------- */
+.hero { position: relative; isolation: isolate; overflow: hidden; padding-inline: 20px; padding-block: 88px 56px; border-bottom: 1px solid var(--line); }
+.hero::before { content: ""; position: absolute; inset: -20% -10% auto -10%; height: 140%; z-index: -2;
+  background: radial-gradient(40% 45% at 22% 30%, var(--glow-a), transparent 70%),
+              radial-gradient(35% 40% at 78% 22%, var(--glow-c), transparent 70%),
+              radial-gradient(45% 40% at 60% 85%, var(--glow-b), transparent 70%);
+  filter: blur(30px); }
+.hero::after { content: ""; position: absolute; inset: 0; z-index: -1;
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 44px 44px; mask-image: radial-gradient(70% 70% at 50% 40%, #000 40%, transparent 100%); -webkit-mask-image: radial-gradient(70% 70% at 50% 40%, #000 40%, transparent 100%); }
+#graph { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.75; }
+.hero-inner { max-width: 980px; margin: 0 auto; }
+.kicker { font: 500 0.76rem var(--f-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+.chip { display: inline-flex; align-items: center; gap: 8px; font: 500 0.76rem var(--f-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2);
+  border: 1px solid var(--line); background: var(--surface); backdrop-filter: blur(8px); padding: 6px 12px; border-radius: 999px; }
+.chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(2.6rem, 8vw, 5.2rem); line-height: 1.0; letter-spacing: -0.035em; margin: 22px 0 18px; text-wrap: balance; }
+h1 .lite { background: linear-gradient(100deg, var(--blue), var(--violet) 45%, var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.dek { font-size: clamp(1.1rem, 2.4vw, 1.4rem); line-height: 1.5; color: var(--ink-2); margin: 0 0 26px; max-width: 40ch; text-wrap: balance; }
+.byline { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.9rem; color: var(--ink-3); }
+.byline strong { color: var(--ink); font-weight: 600; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 0; }
+.links a { font: 600 0.88rem var(--f-body); text-decoration: none; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px; background: var(--surface); backdrop-filter: blur(8px); transition: border-color .2s, transform .2s; }
+.links a.primary { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.links a:hover { border-color: var(--blue); transform: translateY(-1px); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px; margin-top: 48px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--line); }
+.stat { background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(10px); padding: 18px 20px; min-width: 0; }
+.stat .num { font: 600 2.1rem/1.1 var(--f-display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.stat .num small { font-size: 0.5em; color: var(--ink-3); margin-left: 4px; font-weight: 500; }
+.stat .lbl { font: 500 0.72rem var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-top: 6px; }
+.stat:nth-child(3) .num { background: linear-gradient(100deg, var(--blue), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* ---------- article ---------- */
+.page { max-width: 760px; margin: 0 auto; padding-inline: 20px; padding-block: 48px 96px; }
+h2 { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.5rem, 3.4vw, 1.9rem); letter-spacing: -0.02em; margin: 72px 0 12px; text-wrap: balance; }
+h2::before { content: ""; display: block; width: 36px; height: 2px; margin-bottom: 18px; background: linear-gradient(90deg, var(--blue), var(--cyan)); }
+h3 { font-family: var(--f-display); font-weight: 600; font-size: 1.18rem; margin: 34px 0 6px; }
+p { margin: 0 0 16px; color: var(--ink-2); }
+p b, li b { color: var(--ink); }
+ul { color: var(--ink-2); }
+.tldr { position: relative; border: 1px solid var(--line); background: var(--surface); border-radius: 16px; padding: 22px 24px; margin: 0; }
+.tldr::before { content: ""; position: absolute; inset: -1px; border-radius: 16px; padding: 1px; background: linear-gradient(120deg, var(--blue), transparent 40%, transparent 60%, var(--cyan));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+.tldr .kicker { color: var(--blue); }
+.tldr ul { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 8px; }
+.tbd { background: var(--tbd-bg); color: var(--tbd-ink); font: 500 0.82em var(--f-mono); padding: 1px 6px; border-radius: 4px; white-space: normal; }
+
+figure { margin: 28px 0; }
+figcaption { font-size: 0.85rem; color: var(--ink-3); margin-top: 10px; line-height: 1.55; }
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+th, td { padding: 9px 14px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; color: var(--ink-2); }
+th:first-child, td:first-child { text-align: left; }
+thead th { font: 600 0.72rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+tbody tr:last-child td { border-bottom: 0; }
+tr.ours td { background: var(--blue-soft); color: var(--ink); font-weight: 600; }
+tr.sep td { font: 600 0.72rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); text-align: left; }
+
+.chart { border: 1px solid var(--line); border-radius: 14px; padding: 16px 16px 8px; background: var(--surface); }
+.chart svg { display: block; width: 100%; height: auto; }
+.panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.panels .chart { min-width: 0; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 20px 0; }
+.card { border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; min-width: 0; background: var(--surface); transition: border-color .2s; }
+.card:hover { border-color: color-mix(in srgb, var(--blue) 55%, var(--line)); }
+.card .k { font: 500 0.72rem var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
+.card .v { font-family: var(--f-display); font-weight: 600; font-size: 1.1rem; margin-top: 4px; color: var(--ink); }
+.card p { font-size: 0.9rem; margin: 6px 0 0; }
+
+pre { background: var(--surface-solid); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; overflow-x: auto; font: 0.84rem/1.65 var(--f-mono); color: var(--ink-2); }
+code { font-family: var(--f-mono); font-size: 0.88em; }
+.foot { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 0.86rem; color: var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { .links a { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <canvas id="graph" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <span class="chip"><span class="dot"></span>OpenVLHarness · Release · <span class="tbd">[TBD: date]</span></span>
+    <h1>Introducing<br>UniSearcher <span class="lite">Lite</span></h1>
+    <p class="dek">Multimodal search agents at 0.8B, 2B and 4B parameters, with the training data, trajectories and harness to rebuild them.</p>
+    <div class="byline"><span><strong>Rui Sun</strong>, <span class="tbd">[TBD: co-authors]</span></span><span>UCLA NLP</span></div>
+    <div class="links">
+      <a class="primary" href="#">Models on Hugging Face <span class="tbd">[TBD]</span></a>
+      <a href="#">Training data <span class="tbd">[TBD]</span></a>
+      <a href="https://github.com/uclanlp/OpenVLHarness">OpenVLHarness</a>
+      <a href="#">UniSearcher paper <span class="tbd">[TBD]</span></a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="num">54.97</div><div class="lbl">MMSearch · Lite-0.8B</div></div>
+      <div class="stat"><div class="num">61.40</div><div class="lbl">MMSearch · Lite-2B</div></div>
+      <div class="stat"><div class="num">71.35</div><div class="lbl">MMSearch · Lite-4B</div></div>
+      <div class="stat"><div class="num">17.5<small>k</small></div><div class="lbl">Open SFT trajectories</div></div>
+    </div>
+  </div>
+</header>
+
+<article class="page">
+  <div class="tldr">
+    <div class="kicker">TL;DR</div>
+    <ul>
+      <li>We release three small multimodal search agents, <b>UniSearcher-Lite-0.8B, 2B and 4B</b>, fine-tuned from Qwen3.5 on our 17.5k-trajectory search dataset.</li>
+      <li><b>UniSearcher-Lite-4B</b> scores <b>71.35</b> on MMSearch and <b>47.37</b> on BrowseComp-VL, above most published 7B to 9B search agents and several 30B-class ones.</li>
+      <li><b>UniSearcher-Lite-0.8B</b> reaches <b>54.97</b> on MMSearch, above MMSearch-R1-7B and WebWatcher-7B.</li>
+      <li>We release the weights right after SFT, with no RL on top, so groups can skip the costly data collection and SFT stage and start their own RL from a policy that already knows how to search.</li>
+      <li>Everything runs on <a href="https://github.com/uclanlp/OpenVLHarness">OpenVLHarness</a>: the same harness, tools and prompts we trained with, so the numbers here are reproducible end to end.</li>
+    </ul>
+  </div>
+
+  <h2 id="why">Why small search agents</h2>
+  <p>Multimodal search agents look at an image, decide what to search for, read pages, crop and zoom, and keep going until they can answer. Most open agents that do this well sit at 7B to 32B parameters, and training them takes a multi-node budget that many academic groups do not have.</p>
+  <p>We wanted to know how far the same recipe goes at the bottom of the size range. If a 4B model can search well, then a single GPU is enough to run experiments on tool use, reward design or new benchmarks, and the barrier to entry for this research area drops a lot.</p>
+  <p class="tbd">[TBD: one paragraph of motivation in Rui's voice, e.g. the resource-limited lab angle and why we are releasing data, not only weights]</p>
+
+  <h2 id="release">What we are releasing</h2>
+  <div class="cards">
+    <div class="card"><div class="k">Models</div><div class="v">0.8B · 2B · 4B</div><p>Qwen3.5 checkpoints right after SFT, with no RL on top, ready as a starting point for your own RL. Apache 2.0, the same license as Qwen3.5.</p></div>
+    <div class="card"><div class="k">Training data</div><div class="v">17.5k trajectories</div><p>Multi-turn search trajectories with images, reasoning and tool calls, filtered on process, not only on the final answer.</p></div>
+    <div class="card"><div class="k">Trajectories</div><div class="v"><span class="tbd">[TBD: which subset]</span></div><p>Evaluation rollouts from our models, for analysis and as a starting point for RL.</p></div>
+    <div class="card"><div class="k">Harness</div><div class="v">OpenVLHarness</div><p>7 tools (text and image search, page visit, OCR, zoom, grounding, code), prompts and the evaluation suite.</p></div>
+  </div>
+
+  <h2 id="results">Results</h2>
+  <p>We evaluate every model three ways on MMSearch, MMSearch-Plus and BrowseComp-VL. <b>Direct Answer</b> is the base model with no tools. <b>Agent Workflow</b> is the same base model inside our harness, with no agentic training. <b>UniSearcher Lite</b> is the model after supervised fine-tuning on our data, in the same harness.</p>
+
+  <figure>
+    <div class="scroll"><table>
+      <thead><tr><th>Model</th><th>Setting</th><th>MMSearch</th><th>MMSearch-Plus</th><th>BrowseComp-VL</th></tr></thead>
+      <tbody>
+        <tr><td>Qwen3.5-0.8B</td><td style="text-align:left">Direct Answer</td><td>9.94</td><td>0.32</td><td><span class="tbd">TBD</span></td></tr>
+        <tr><td>Qwen3.5-0.8B</td><td style="text-align:left">Agent Workflow</td><td>30.41</td><td>4.18</td><td>12.53</td></tr>
+        <tr class="ours"><td>UniSearcher-Lite-0.8B</td><td style="text-align:left">SFT</td><td>54.97</td><td>12.22</td><td>28.32</td></tr>
+        <tr><td>Qwen3.5-2B</td><td style="text-align:left">Direct Answer</td><td>15.79</td><td>0.64</td><td><span class="tbd">TBD</span></td></tr>
+        <tr><td>Qwen3.5-2B</td><td style="text-align:left">Agent Workflow</td><td>43.86</td><td>8.68</td><td><span class="tbd">TBD</span></td></tr>
+        <tr class="ours"><td>UniSearcher-Lite-2B</td><td style="text-align:left">SFT</td><td>61.40</td><td>15.76</td><td>38.35</td></tr>
+        <tr><td>Qwen3.5-4B</td><td style="text-align:left">Direct Answer</td><td>19.30</td><td><span class="tbd">TBD</span></td><td><span class="tbd">TBD</span></td></tr>
+        <tr><td>Qwen3.5-4B</td><td style="text-align:left">Agent Workflow</td><td>73.10</td><td>19.29</td><td><span class="tbd">TBD</span></td></tr>
+        <tr class="ours"><td>UniSearcher-Lite-4B</td><td style="text-align:left">SFT</td><td>71.35</td><td>22.51</td><td>47.37</td></tr>
+      </tbody>
+    </table></div>
+    <figcaption>Accuracy (%). <span class="tbd">[TBD: decide which SFT run to report and whether to re-evaluate with the final parity settings before release]</span></figcaption>
+  </figure>
+
+  <h3>Training matters most where the base model cannot search</h3>
+  <p>Before training, Qwen3.5-0.8B barely uses its tools. On MMSearch-Plus the median episode makes one tool call, and 85 of 311 episodes make none. Fine-tuning turns it into an agent that searches over many turns, and MMSearch rises from 30.41 to 54.97. At 2B the gain is +17.5 points on MMSearch. At 4B the untrained model is already a capable tool user on MMSearch, and fine-tuning pays off on the harder MMSearch-Plus (19.29 to 22.51) <span class="tbd">[TBD: BrowseComp-VL gain at 4B]</span>.</p>
+
+  <h3>On the accuracy-size Pareto frontier</h3>
+  <p>Plotting every published multimodal search agent by size and accuracy, the three UniSearcher Lite models define the frontier below 7B, and each step up the ladder adds accuracy. The 4B model is above most published 8B agents on both benchmarks, and above several 30B-class agents such as OpenSearch-VL-30B-A3B, MM-DeepResearch-32B and WebWatcher-32B.</p>
+  <figure>
+    <div class="panels">
+      <div class="chart" id="pareto-mms" role="img" aria-label="MMSearch accuracy versus model size"></div>
+      <div class="chart" id="pareto-bcvl" role="img" aria-label="BrowseComp-VL accuracy versus model size"></div>
+    </div>
+    <figcaption>Accuracy (%) against total parameters (log scale). Blue: UniSearcher Lite. Grey: published agents, scores as reported in their papers. The line is the Pareto frontier. <span class="tbd">[TBD: add our larger UniSearcher models once their numbers are final]</span></figcaption>
+  </figure>
+
+  <figure>
+    <div class="scroll"><table>
+      <thead><tr><th>Method</th><th>Size</th><th>MMSearch</th><th>BrowseComp-VL</th><th>MMSearch-Plus</th></tr></thead>
+      <tbody>
+        <tr class="sep"><td colspan="5">UniSearcher Lite (ours)</td></tr>
+        <tr class="ours"><td>UniSearcher-Lite</td><td>0.8B</td><td>54.97</td><td>28.32</td><td>12.22</td></tr>
+        <tr class="ours"><td>UniSearcher-Lite</td><td>2B</td><td>61.40</td><td>38.35</td><td>15.76</td></tr>
+        <tr class="ours"><td>UniSearcher-Lite</td><td>4B</td><td>71.35</td><td>47.37</td><td>22.51</td></tr>
+        <tr class="sep"><td colspan="5">Published agents, 7B to 9B</td></tr>
+        <tr><td>WebWatcher</td><td>7B</td><td>49.1</td><td>21.2</td><td>–</td></tr>
+        <tr><td>MMSearch-R1</td><td>7B</td><td>53.8</td><td>–</td><td>–</td></tr>
+        <tr><td>DeepEyesV2</td><td>7B</td><td>63.7</td><td>–</td><td>–</td></tr>
+        <tr><td>OpenSearch-VL</td><td>8B</td><td>64.5</td><td>37.6</td><td>–</td></tr>
+        <tr><td>MM-DeepResearch</td><td>8B</td><td>67.8</td><td>37.9</td><td>–</td></tr>
+        <tr><td>SearchEyes</td><td>9B</td><td>69.2</td><td>42.3</td><td>–</td></tr>
+        <tr><td>Vision-DeepResearch</td><td>8B</td><td>69.6</td><td>42.6</td><td>20.4</td></tr>
+        <tr><td>POINTS-Seeker</td><td>8B</td><td>70.8</td><td>44.4</td><td>25.2</td></tr>
+        <tr class="sep"><td colspan="5">Published agents, 30B class</td></tr>
+        <tr><td>WebWatcher</td><td>32B</td><td>55.3</td><td>27.0</td><td>–</td></tr>
+        <tr><td>Skywork-R1V4</td><td>30B-A3B</td><td>66.1</td><td>38.4</td><td>–</td></tr>
+        <tr><td>OpenSearch-VL</td><td>30B-A3B</td><td>68.7</td><td>41.1</td><td>–</td></tr>
+        <tr><td>MM-DeepResearch</td><td>32B</td><td>69.0</td><td>43.0</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <figcaption>Accuracy (%). <span class="tbd">[TBD: pick which comparison rows to keep for the final post]</span></figcaption>
+  </figure>
+
+  <h2 id="why-sft">Why we share SFT checkpoints</h2>
+  <p>For small models, and for multimodal search in particular, the best results come from supervised fine-tuning followed by reinforcement learning. Recent multimodal search agents such as Neos, OpenSearch-VL, SimpleSearch-VL, Vision-DeepResearch, UniBrowse and REDSearcher all follow this SFT-then-RL path, and each reports gains from both stages. An untrained 0.8B or 2B model rarely calls its tools, so reinforcement learning has almost no successful search episodes to learn from. SFT teaches the basic loop of searching, reading and answering, and RL then works on top of a policy that already knows how to search. Our own ladder shows the same pattern from the other side: the stronger the backbone, the less SFT adds. On MMSearch, SFT lifts the 0.8B model by 24.6 points and the 2B model by 17.5, while the untrained 4B model already scores 73.10 inside our harness and SFT leaves it about level. A backbone at that level can go straight to RL.</p>
+  <p>The contrast with RL-only training is clear at the small end. MMSearch-R1 trains Qwen2.5-VL-7B with reinforcement learning alone and reaches 53.8 on MMSearch. UniSearcher-Lite-0.8B, with SFT alone, reaches 54.97 at about a ninth of the size.</p>
+  <p>The SFT stage is also the expensive part for most groups. It needs a large set of clean multi-turn trajectories and a training run long enough to fit them. To take that cost off the table, we release the models right after SFT, with no extra RL on top. They are meant as starting points: a base for RL with new rewards, new tools or new tasks, or a reference point for new benchmarks. We hope they become a foundation for the next generation of multimodal search agents, and that others build things on top of them that we have not thought of.</p>
+
+  <h2 id="recipe">How we trained it</h2>
+  <p>UniSearcher Lite uses the understanding recipe of <a href="#">UniSearcher</a> <span class="tbd">[TBD: paper link]</span>, applied unchanged to three smaller Qwen3.5 backbones: one round of supervised fine-tuning on the same 17.5k trajectories, no RL. The data, filtering, training settings and the harness are described in the UniSearcher paper and in <a href="https://github.com/uclanlp/OpenVLHarness">OpenVLHarness</a>.</p>
+
+  <h2 id="quickstart">Try it</h2>
+  <p>Serve a model and point OpenVLHarness at it.</p>
+<pre><code># 1. serve the model  [TBD: final command]
+vllm serve <span class="tbd">[TBD: HF repo id]</span> --enable-auto-tool-choice --tool-call-parser qwen3_coder --reasoning-parser qwen3
+
+# 2. run an evaluation with OpenVLHarness  [TBD: final command]
+python run_benchmark.py --config <span class="tbd">[TBD: release config]</span> --data MMSearch</code></pre>
+
+  <h2 id="next">Limitations and what comes next</h2>
+  <p>Small models still run out of turns more often than large ones, and when they do they rarely recover a correct answer. They also repeat searches more often. <span class="tbd">[TBD: RL results on the small models, if any, and the plan for the next release]</span></p>
+
+  <h2 id="cite">Citation</h2>
+<pre><code><span class="tbd">[TBD: BibTeX for UniSearcher / OpenVLHarness]</span></code></pre>
+
+  <div class="foot">Part of the <a href="https://openvlharness.github.io/">OpenVLHarness</a> family, alongside <a href="https://threesr.github.io/toolsmith/">ToolSmith</a>.</div>
+</article>
+
+<script>
+(function () {
+  // [name, total params (B), score]; ours flagged with 1. Published values as reported (paper Table 1 quoted rows).
+  var ours = [["Lite-0.8B", 0.8, 54.97, 28.32], ["Lite-2B", 2, 61.40, 38.35], ["Lite-4B", 4, 71.35, 47.37]];
+  var pub = [
+    ["WebWatcher-7B",7,49.1,21.2],["MMSearch-R1-7B",7,53.8,null],["DeepEyesV2-7B",7,63.7,null],
+    ["SenseNova-MARS-8B",8,67.8,null],["Vision-DeepResearch-8B",8,69.6,42.6],["MM-DeepResearch-8B",8,67.8,37.9],
+    ["POINTS-Seeker-8B",8,70.8,44.4],["OpenSearch-VL-8B",8,64.5,37.6],["Visual-Seeker-8B",8,72.2,47.6],
+    ["SimpleSearch-VL-8B",8,77.1,52.1],["DeepVoyager-VL-8B",8,72.7,58.4],["SearchEyes-9B",9,69.2,42.3],["Neos-9B",9,81.3,63.2],
+    ["SearchEyes-27B",27,82.4,49.3],["Skywork-R1V4-30B-A3B",30,66.1,38.4],["Vision-DeepResearch-30B-A3B",30,69.6,53.7],
+    ["REDSearcher-MM-30B-A3B",30,72.9,57.2],["LMM-Searcher-30B-A3B",30,72.3,null],["OpenSearch-VL-30B-A3B",30,68.7,41.1],
+    ["SimpleSearch-VL-30B-A3B",30,83.6,55.9],["DeepVoyager-VL-30B-A3B",30,74.0,64.2],["WeAgent-MMSearch-30B-A3B",30,77.8,null],
+    ["WebWatcher-32B",32,55.3,27.0],["SenseNova-MARS-32B",32,74.3,null],["MM-DeepResearch-32B",32,69.0,43.0],
+    ["OpenSearch-VL-32B",32,72.3,43.8],["UniBrowse-35B-A3B",35,75.2,57.8],["MIRA-35B-A3B",35,80.7,58.4],["Neos-35B",35,83.7,66.4]
+  ];
+  function draw(id, col, title, ymin, ymax) {
+    var pts = ours.map(function (d) { return {n: d[0], x: d[1], y: d[col], o: 1}; })
+      .concat(pub.filter(function (d) { return d[col] != null; }).map(function (d) { return {n: d[0], x: d[1], y: d[col], o: 0}; }));
+    // Pareto frontier: walk by size, keep a point if it beats every smaller-or-equal point.
+    var srt = pts.slice().sort(function (a, b) { return a.x - b.x || b.y - a.y; }), best = -1, front = [];
+    srt.forEach(function (p) { if (p.y > best) { best = p.y; front.push(p); } });
+    var W = 360, H = 280, L = 40, R = 14, T = 30, B = 36;
+    var lx = function (v) { return L + (W - L - R) * (Math.log(v) - Math.log(0.6)) / (Math.log(45) - Math.log(0.6)); };
+    var ly = function (v) { return T + (H - T - B) * (1 - (v - ymin) / (ymax - ymin)); };
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" font-family="Inter, system-ui, sans-serif" font-size="11">';
+    s += '<text x="' + L + '" y="16" fill="var(--ink)" font-weight="600" font-size="13">' + title + '</text>';
+    for (var t = ymin; t <= ymax; t += 20) {
+      s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + ly(t) + '" y2="' + ly(t) + '" stroke="var(--line)"/>';
+      s += '<text x="' + (L - 6) + '" y="' + (ly(t) + 4) + '" text-anchor="end" fill="var(--ink-3)">' + t + '</text>';
+    }
+    [1, 2, 4, 8, 16, 32].forEach(function (t) {
+      s += '<line x1="' + lx(t) + '" x2="' + lx(t) + '" y1="' + (H - B) + '" y2="' + (H - B + 4) + '" stroke="var(--ink-3)"/>';
+      s += '<text x="' + lx(t) + '" y="' + (H - B + 16) + '" text-anchor="middle" fill="var(--ink-3)">' + t + 'B</text>';
+    });
+    s += '<text x="' + ((L + W - R) / 2) + '" y="' + (H - 4) + '" text-anchor="middle" fill="var(--ink-3)">Total parameters</text>';
+    // frontier as a staircase
+    var path = "";
+    front.forEach(function (p, i) {
+      path += (i ? " H" + lx(p.x).toFixed(1) + " V" + ly(p.y).toFixed(1) : "M" + lx(p.x).toFixed(1) + " " + ly(p.y).toFixed(1));
+    });
+    path += " H" + (W - R);
+    s += '<path d="' + path + '" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 4"/>';
+    pts.filter(function (p) { return !p.o; }).forEach(function (p) {
+      s += '<circle cx="' + lx(p.x) + '" cy="' + ly(p.y) + '" r="4" fill="var(--bar-base)"><title>' + p.n + ': ' + p.y + '</title></circle>';
+    });
+    var oursPts = pts.filter(function (p) { return p.o; });
+    s += '<polyline points="' + oursPts.map(function (p) { return lx(p.x) + "," + ly(p.y); }).join(" ") + '" fill="none" stroke="var(--blue)" stroke-width="2"/>';
+    oursPts.forEach(function (p) {
+      s += '<circle cx="' + lx(p.x) + '" cy="' + ly(p.y) + '" r="5.5" fill="var(--blue)" stroke="var(--bg)" stroke-width="1.5"><title>UniSearcher ' + p.n + ': ' + p.y + '</title></circle>';
+      s += '<text x="' + (lx(p.x) - 8) + '" y="' + (ly(p.y) - 9) + '" text-anchor="middle" fill="var(--blue)" font-weight="600">' + p.n.replace("Lite-", "") + '</text>';
+    });
+    document.getElementById(id).innerHTML = s + "</svg>";
+  }
+  draw("pareto-mms", 2, "MMSearch", 40, 100);
+  draw("pareto-bcvl", 3, "BrowseComp-VL", 20, 80);
+})();
+</script>
+<script>
+(function () {
+  var c = document.getElementById("graph"); if (!c) return;
+  var ctx = c.getContext("2d"), dpr = Math.min(window.devicePixelRatio || 1, 2), W, H, nodes = [];
+  var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function color(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim() || "#6aa8ff"; }
+  function size() {
+    W = c.clientWidth; H = c.clientHeight; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var n = Math.round(Math.min(70, W * H / 16000)); nodes = [];
+    for (var i = 0; i < n; i++) nodes.push({x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25, r: Math.random() < .12 ? 2.4 : 1.3});
+  }
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    var line = color("--blue"), hot = color("--cyan");
+    for (var i = 0; i < nodes.length; i++) {
+      var a = nodes[i];
+      if (!still) { a.x += a.vx; a.y += a.vy; if (a.x < 0 || a.x > W) a.vx *= -1; if (a.y < 0 || a.y > H) a.vy *= -1; }
+      for (var j = i + 1; j < nodes.length; j++) {
+        var b = nodes[j], dx = a.x - b.x, dy = a.y - b.y, d = Math.sqrt(dx * dx + dy * dy);
+        if (d < 130) { ctx.globalAlpha = (1 - d / 130) * 0.35; ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+      }
+    }
+    nodes.forEach(function (n) { ctx.globalAlpha = n.r > 2 ? 0.95 : 0.55; ctx.fillStyle = n.r > 2 ? hot : line; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, 6.283); ctx.fill(); });
+    ctx.globalAlpha = 1;
+    if (!still && !document.hidden) requestAnimationFrame(frame);
+  }
+  size(); frame();
+  window.addEventListener("resize", function () { size(); if (still) frame(); });
+  document.addEventListener("visibilitychange", function () { if (!document.hidden && !still) requestAnimationFrame(frame); });
+})();
+</script>
+</body>
+</html>
