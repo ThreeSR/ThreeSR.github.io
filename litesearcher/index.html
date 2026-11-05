@@ -64,8 +64,11 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-
 h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(2.6rem, 8vw, 5.2rem); line-height: 1.0; letter-spacing: -0.035em; margin: 22px 0 18px; text-wrap: balance; }
 h1 .lite { background: linear-gradient(100deg, var(--blue), var(--violet) 45%, var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .dek { font-size: clamp(1.1rem, 2.4vw, 1.4rem); line-height: 1.5; color: var(--ink-2); margin: 0 0 26px; max-width: 40ch; text-wrap: balance; }
-.byline { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.9rem; color: var(--ink-3); }
+.byline { display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 0.9rem; color: var(--ink-3); }
 .byline strong { color: var(--ink); font-weight: 600; }
+.byline a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s, color .2s; }
+.byline a:hover { color: var(--ink); border-bottom-color: currentColor; }
+.byline .sep { opacity: .6; }
 .links { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 0; }
 .links a { font: 600 0.88rem var(--f-body); text-decoration: none; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px; background: var(--surface); backdrop-filter: blur(8px); transition: border-color .2s, transform .2s; }
 .links a.primary { background: var(--ink); border-color: var(--ink); color: var(--bg); }
@@ -129,7 +132,7 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
     <span class="chip"><span class="dot"></span>OpenVLHarness · Release · <span class="tbd">[TBD: date]</span></span>
     <h1>Introducing<br><span class="lite">Lite</span>Searcher</h1>
     <p class="dek">Multimodal search agents at 0.8B, 2B and 4B parameters, with the training data, trajectories and harness to rebuild them.</p>
-    <div class="byline"><span><strong>Rui Sun</strong>, <span class="tbd">[TBD: co-authors]</span></span><span>UCLA NLP</span></div>
+    <div class="byline"><a href="https://threesr.github.io/" target="_blank" rel="noopener"><strong>Rui Sun</strong></a><span class="sep">·</span><a href="https://openvlharness.github.io/" target="_blank" rel="noopener">OpenVLHarness Team</a><span class="sep">·</span><a href="https://web.cs.ucla.edu/~kwchang/" target="_blank" rel="noopener">UCLA NLP</a></div>
     <div class="links">
       <a class="primary" href="#">Models on Hugging Face <span class="tbd">[TBD]</span></a>
       <a href="#">Training data <span class="tbd">[TBD]</span></a>
