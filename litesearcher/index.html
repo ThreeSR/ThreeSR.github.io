@@ -118,6 +118,38 @@ tr.sep td { font: 600 0.72rem var(--f-mono); letter-spacing: 0.08em; text-transf
 .card .v { font-family: var(--f-display); font-weight: 600; font-size: 1.1rem; margin-top: 4px; color: var(--ink); }
 .card p { font-size: 0.9rem; margin: 6px 0 0; }
 
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 18px 0 14px; }
+.tabs button { font: 600 0.84rem var(--f-body); color: var(--ink-2); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; transition: border-color .2s, color .2s, background .2s; }
+.tabs button:hover { border-color: var(--blue); color: var(--ink); }
+.tabs button[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.traj { border: 1px solid var(--line); border-radius: 16px; background: var(--surface); padding: 18px; }
+.traj .meta { font: 500 0.72rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.traj .q { font: 600 1.05rem/1.45 var(--f-display); color: var(--ink); margin: 6px 0 12px; }
+.traj .inimgs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.traj .inimgs img { max-height: 220px; max-width: 100%; border-radius: 10px; border: 1px solid var(--line); }
+.steps { list-style: none; margin: 0; padding: 0; position: relative; }
+.steps::before { content: ""; position: absolute; left: 13px; top: 6px; bottom: 6px; width: 1px; background: var(--line); }
+.step { position: relative; padding: 0 0 14px 38px; min-width: 0; }
+.step .n { position: absolute; left: 0; top: 0; width: 27px; height: 27px; border-radius: 50%; display: grid; place-items: center; font: 600 0.72rem var(--f-mono); color: var(--bg); background: var(--tc, var(--blue)); }
+.step .call { font: 0.82rem/1.5 var(--f-mono); color: var(--ink); overflow-wrap: anywhere; }
+.step .call b { color: var(--tc, var(--blue)); font-weight: 600; }
+.step .think { font-size: 0.86rem; line-height: 1.55; color: var(--ink-3); font-style: italic; margin: 4px 0 6px; }
+.step .res { font: 0.78rem/1.55 var(--f-mono); color: var(--ink-2); white-space: pre-wrap; overflow-wrap: anywhere; background: var(--surface-solid); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; margin-top: 4px; max-height: 9.5em; overflow: auto; }
+.step .rimgs { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.step .rimgs img { height: 74px; border-radius: 8px; border: 1px solid var(--line); }
+.final { margin-top: 4px; border-radius: 12px; padding: 12px 14px; background: var(--blue-soft); border: 1px solid color-mix(in srgb, var(--blue) 35%, var(--line)); }
+.final .k { font: 500 0.7rem var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
+.final .a { font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
+.final .gt, .final .base { font-size: 0.86rem; color: var(--ink-2); margin-top: 4px; overflow-wrap: anywhere; }
+.bars { display: grid; gap: 7px; }
+.bar-row { display: grid; grid-template-columns: 118px 1fr 52px; gap: 10px; align-items: center; font-size: 0.84rem; color: var(--ink-2); }
+.bar-row .track { height: 10px; border-radius: 6px; background: var(--line); overflow: hidden; display: flex; }
+.bar-row .track span { display: block; height: 100%; }
+.bar-row .v { font: 0.8rem var(--f-mono); text-align: right; color: var(--ink); }
+#tbl-tools th, #tbl-tools td { padding: 8px 9px; }
+#tbl-tools th { font-size: 0.66rem; letter-spacing: 0.04em; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.78rem; color: var(--ink-3); margin-top: 10px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
 pre { background: var(--surface-solid); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; overflow-x: auto; font: 0.84rem/1.65 var(--f-mono); color: var(--ink-2); }
 code { font-family: var(--f-mono); font-size: 0.88em; }
 .foot { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 0.86rem; color: var(--ink-3); }
@@ -143,7 +175,7 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
       <div class="stat"><div class="num">54.97</div><div class="lbl">MMSearch · 0.8B</div></div>
       <div class="stat"><div class="num">61.40</div><div class="lbl">MMSearch · 2B</div></div>
       <div class="stat"><div class="num">71.35</div><div class="lbl">MMSearch · 4B</div></div>
-      <div class="stat"><div class="num">17.5<small>k</small></div><div class="lbl">Open SFT trajectories</div></div>
+      <div class="stat"><div class="num">13<small>k</small></div><div class="lbl">Open SFT trajectories</div></div>
     </div>
   </div>
 </header>
@@ -152,7 +184,7 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
   <div class="tldr">
     <div class="kicker">TL;DR</div>
     <ul>
-      <li>We release three small multimodal search agents, <b>LiteSearcher-0.8B, 2B and 4B</b>, fine-tuned from Qwen3.5 on our 17.5k-trajectory search dataset.</li>
+      <li>We release three small multimodal search agents, <b>LiteSearcher-0.8B, 2B and 4B</b>, fine-tuned from Qwen3.5 on multimodal search trajectories, and we open 13k of those trajectories.</li>
       <li><b>LiteSearcher-4B</b> scores <b>71.35</b> on MMSearch and <b>47.37</b> on BrowseComp-VL, above most published 7B to 9B search agents and several 30B-class ones.</li>
       <li><b>LiteSearcher-0.8B</b> reaches <b>54.97</b> on MMSearch, above MMSearch-R1-7B and WebWatcher-7B.</li>
       <li>We release the weights right after SFT, with no RL on top, so groups can skip the costly data collection and SFT stage and start their own RL from a policy that already knows how to search.</li>
@@ -168,10 +200,23 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
   <h2 id="release">What we are releasing</h2>
   <div class="cards">
     <div class="card"><div class="k">Models</div><div class="v">0.8B · 2B · 4B</div><p>Qwen3.5 checkpoints right after SFT, with no RL on top, ready as a starting point for your own RL. Apache 2.0, the same license as Qwen3.5.</p></div>
-    <div class="card"><div class="k">Training data</div><div class="v">17.5k trajectories</div><p>Multi-turn search trajectories with images, reasoning and tool calls, filtered on process, not only on the final answer.</p></div>
-    <div class="card"><div class="k">Trajectories</div><div class="v"><span class="tbd">[TBD: which subset]</span></div><p>Evaluation rollouts from our models, for analysis and as a starting point for RL.</p></div>
+    <div class="card"><div class="k">Training data</div><div class="v">13k trajectories</div><p>Multi-turn search trajectories with images, reasoning and tool calls, filtered on process, not only on the final answer. Questions come from public datasets.</p></div>
+    <div class="card"><div class="k">Trajectories</div><div class="v">Evaluation rollouts</div><p>Full rollouts of all three models on the benchmarks below, for analysis and as a starting point for RL. <a href="#trajectories">Examples below</a>. <span class="tbd">[TBD: which subset]</span></p></div>
     <div class="card"><div class="k">Harness</div><div class="v">OpenVLHarness</div><p>7 tools (text and image search, page visit, OCR, zoom, grounding, code), prompts and the evaluation suite.</p></div>
   </div>
+
+  <h3 id="data">Inside the training data</h3>
+  <p>The open set has 12,968 trajectories. Each one starts from an image question taken from a public dataset and records the full loop: the reasoning before each step, every tool call, what the tool returned, and the final answer. A trajectory makes 4.5 tool calls on average (median 3), and only 2.3% answer without any tool.</p>
+  <figure>
+    <div class="panels">
+      <div class="chart"><div class="meta" style="font:500 .72rem var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px">Tool calls per trajectory</div><div id="ds-hist" class="bars"></div></div>
+      <div class="chart"><div style="font:500 .72rem var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px">Share of tool calls · question sources</div><div id="ds-mix" class="bars"></div><div id="ds-src" class="bars" style="margin-top:14px"></div></div>
+    </div>
+    <figcaption>Statistics of the 12,968 open trajectories.</figcaption>
+  </figure>
+  <p>Three trajectories from the open set, one per question source, shown as they appear in the data. Reasoning and tool outputs are cut to their first lines.</p>
+  <div class="tabs" role="tablist" id="ex-tabs"></div>
+  <div id="ex-view"></div>
 
   <h2 id="results">Results</h2>
   <p>We evaluate every model three ways on MMSearch, MMSearch-Plus and BrowseComp-VL. <b>Direct Answer</b> is the base model with no tools. <b>Agent Workflow</b> is the same base model inside our harness, with no agentic training. <b>LiteSearcher</b> is the model after supervised fine-tuning on our data, in the same harness.</p>
@@ -192,6 +237,14 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
       </tbody>
     </table></div>
     <figcaption>Accuracy (%). <span class="tbd">[TBD: decide which SFT run to report and whether to re-evaluate with the final parity settings before release]</span></figcaption>
+  </figure>
+
+  <h3 id="more-benchmarks">Beyond search benchmarks</h3>
+  <p>Search training should not cost the model its general visual knowledge. We also run the common knowledge-intensive VQA benchmarks and the newer deep-research suites, with the same three settings and the same harness.</p>
+  <figure>
+    <div class="scroll"><table id="tbl-vqa"></table></div>
+    <div class="scroll" style="margin-top:12px"><table id="tbl-dr"></table></div>
+    <figcaption>Accuracy (%). <span class="tbd">[TBD: runs in progress, cells fill in as they finish]</span></figcaption>
   </figure>
 
   <h3>Training matters most where the base model cannot search</h3>
@@ -234,13 +287,27 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
     <figcaption>Accuracy (%). <span class="tbd">[TBD: pick which comparison rows to keep for the final post]</span></figcaption>
   </figure>
 
+  <h2 id="tool-use">How the agents use their tools</h2>
+  <p>Fine-tuning changes how often and how widely the small models use their tools. On MMSearch-Plus, the base 0.8B model makes no tool call in 27.3% of episodes and 1.7 calls on average. After SFT it skips tools in 4.5% of episodes and makes 8.9 calls, spread over more distinct tools (2.4 against 1.1 per episode). The base models also call tools that do not exist, such as <code>image_search_tool</code> or <code>Answer</code>; after SFT this almost disappears. At 4B the base model already searches a lot, and SFT mainly shifts the mix toward image tools: zoom-in rises from 3.2% to 18.2% of calls on MMSearch-Plus.</p>
+  <div class="tabs" role="tablist" id="ts-tabs"></div>
+  <figure>
+    <div class="scroll"><table id="tbl-tools"></table></div>
+    <div class="chart" style="margin-top:12px"><div id="ts-mix" class="bars"></div><div class="legend" id="ts-legend"></div></div>
+    <figcaption>AW: base model in our harness. SFT: LiteSearcher. Calls per episode (mean and median), episodes with no tool call, distinct tools per episode, episodes with a repeated identical call, episodes that hit the 20-turn budget, and calls to tool names that do not exist. Bars: share of all tool calls. <span class="tbd">[TBD: BrowseComp-VL AW for 2B and 4B still running]</span></figcaption>
+  </figure>
+
+  <h3 id="trajectories">Representative trajectories</h3>
+  <p>One MMSearch-Plus question per size where LiteSearcher answers correctly and the base model in the same harness does not. The 2B rollout shows a typical small-model slip: it repeats a zoom call twice, gets the repeated-call notice, fixes its coordinate order and then reads the sign.</p>
+  <div class="tabs" role="tablist" id="tr-tabs"></div>
+  <div id="tr-view"></div>
+
   <h2 id="why-sft">Why we share SFT checkpoints</h2>
   <p>For small models, and for multimodal search in particular, the best results come from supervised fine-tuning followed by reinforcement learning. Recent multimodal search agents such as Neos, OpenSearch-VL, SimpleSearch-VL, Vision-DeepResearch, UniBrowse and REDSearcher all follow this SFT-then-RL path, and each reports gains from both stages. An untrained 0.8B or 2B model rarely calls its tools, so reinforcement learning has almost no successful search episodes to learn from. SFT teaches the basic loop of searching, reading and answering, and RL then works on top of a policy that already knows how to search. Our own ladder shows the same pattern from the other side: the stronger the backbone, the less SFT adds. On MMSearch, SFT lifts the 0.8B model by 24.6 points and the 2B model by 17.5, while the untrained 4B model already scores 73.10 inside our harness and SFT leaves it about level. A backbone at that level can go straight to RL.</p>
   <p>The contrast with RL-only training is clear at the small end. MMSearch-R1 trains Qwen2.5-VL-7B with reinforcement learning alone and reaches 53.8 on MMSearch. LiteSearcher-0.8B, with SFT alone, reaches 54.97 at about a ninth of the size.</p>
   <p>The SFT stage is also the expensive part for most groups. It needs a large set of clean multi-turn trajectories and a training run long enough to fit them. To take that cost off the table, we release the models right after SFT, with no extra RL on top. They are meant as starting points: a base for RL with new rewards, new tools or new tasks, or a reference point for new benchmarks. We hope they become a foundation for the next generation of multimodal search agents, and that others build things on top of them that we have not thought of.</p>
 
   <h2 id="recipe">How we trained it</h2>
-  <p>LiteSearcher uses the understanding recipe of <a href="#">UniSearcher</a> <span class="tbd">[TBD: paper link]</span>, applied unchanged to three smaller Qwen3.5 backbones: one round of supervised fine-tuning on the same 17.5k trajectories, no RL. The data, filtering, training settings and the harness are described in the UniSearcher paper and in <a href="https://github.com/uclanlp/OpenVLHarness">OpenVLHarness</a>.</p>
+  <p>LiteSearcher uses the understanding recipe of <a href="#">UniSearcher</a> <span class="tbd">[TBD: paper link]</span>, applied unchanged to three smaller Qwen3.5 backbones: one round of supervised fine-tuning on our multimodal search trajectories, no RL. The data, filtering, training settings and the harness are described in the UniSearcher paper and in <a href="https://github.com/uclanlp/OpenVLHarness">OpenVLHarness</a>.</p>
 
   <h2 id="quickstart">Try it</h2>
   <p>Serve a model and point OpenVLHarness at it.</p>
@@ -347,5 +414,7 @@ python run_benchmark.py --config <span class="tbd">[TBD: release config]</span> 
   document.addEventListener("visibilitychange", function () { if (!document.hidden && !still) requestAnimationFrame(frame); });
 })();
 </script>
+<script src="content.js"></script>
+<script src="sections.js"></script>
 </body>
 </html>
