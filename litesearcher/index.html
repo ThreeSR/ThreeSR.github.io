@@ -194,7 +194,7 @@ a.mr-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, 
 .mr-art { aspect-ratio: 16 / 9; display: grid; place-items: center; color: var(--ink); position: relative; overflow: hidden;
   background: radial-gradient(70% 90% at 15% 10%, var(--glow-a), transparent 70%), radial-gradient(60% 80% at 90% 100%, var(--glow-b), transparent 70%), var(--bg); }
 .mr-art svg { width: 62%; height: auto; }
-.mr-harness { color: var(--blue); } .mr-unisearcher { color: var(--violet); } .mr-toolsmith { color: var(--gold); } .mr-litesearcher { color: var(--cyan); } .mr-awesome { color: var(--t-ground); }
+.mr-harness { color: var(--blue); } .mr-toolsmith { color: var(--gold); } .mr-litesearcher { color: var(--cyan); } .mr-awesome { color: var(--t-ground); }
 .mr-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .mr-kind { font: 500 0.7rem var(--f-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
 .mr-title { font: 600 1.25rem/1.25 var(--f-display); letter-spacing: -0.015em; color: var(--ink); }
@@ -226,7 +226,6 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
       <a class="primary" href="#">Models on Hugging Face <span class="tbd">[TBD]</span></a>
       <a href="#">Training data <span class="tbd">[TBD]</span></a>
       <a href="https://github.com/uclanlp/OpenVLHarness">OpenVLHarness</a>
-      <a href="#">UniSearcher paper <span class="tbd">[TBD]</span></a>
     </div>
     <div class="stats">
       <div class="stat"><div class="num">54.97</div><div class="lbl">MMSearch · 0.8B</div></div>
@@ -314,7 +313,7 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
       <div class="chart" id="pareto-mms" role="img" aria-label="MMSearch accuracy versus model size"></div>
       <div class="chart" id="pareto-bcvl" role="img" aria-label="BrowseComp-VL accuracy versus model size"></div>
     </div>
-    <figcaption>Accuracy (%) against total parameters (log scale). Blue: LiteSearcher. Grey: published agents, scores as reported in their papers. The line is the Pareto frontier. <span class="tbd">[TBD: add our larger UniSearcher models once their numbers are final]</span></figcaption>
+    <figcaption>Accuracy (%) against total parameters (log scale). Blue: LiteSearcher. Grey: published agents, scores as reported in their papers. The line is the Pareto frontier.</figcaption>
   </figure>
 
   <figure>
@@ -364,7 +363,7 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
   <p>The SFT stage is also the expensive part for most groups. It needs a large set of clean multi-turn trajectories and a training run long enough to fit them. To take that cost off the table, we release the models right after SFT, with no extra RL on top. They are meant as starting points: a base for RL with new rewards, new tools or new tasks, or a reference point for new benchmarks. We hope they become a foundation for the next generation of multimodal search agents, and that others build things on top of them that we have not thought of.</p>
 
   <h2 id="recipe">How we trained it</h2>
-  <p>LiteSearcher uses the understanding recipe of <a href="#">UniSearcher</a> <span class="tbd">[TBD: paper link]</span>, applied unchanged to three smaller Qwen3.5 backbones: one round of supervised fine-tuning on our multimodal search trajectories, no RL. The data, filtering, training settings and the harness are described in the UniSearcher paper and in <a href="https://github.com/uclanlp/OpenVLHarness">OpenVLHarness</a>.</p>
+  <p>LiteSearcher applies our multimodal search training recipe unchanged to three Qwen3.5 backbones: one round of supervised fine-tuning on our multimodal search trajectories, with no RL. Training and evaluation use the harness, tools and prompts in <a href="https://github.com/uclanlp/OpenVLHarness">OpenVLHarness</a>.</p>
 
   <h2 id="quickstart">Try it</h2>
   <p>Serve a model and point OpenVLHarness at it.</p>
@@ -378,7 +377,7 @@ python run_benchmark.py --config <span class="tbd">[TBD: release config]</span> 
   <p>Small models still run out of turns more often than large ones, and when they do they rarely recover a correct answer. They also repeat searches more often. <span class="tbd">[TBD: RL results on the small models, if any, and the plan for the next release]</span></p>
 
   <h2 id="cite">Citation</h2>
-<pre><code><span class="tbd">[TBD: BibTeX for UniSearcher / OpenVLHarness]</span></code></pre>
+<pre><code><span class="tbd">[TBD: BibTeX for LiteSearcher / OpenVLHarness]</span></code></pre>
 
 </article>
 
