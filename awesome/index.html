@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Awesome Multimodal Deep Research</title>
+<meta name="description" content="A living map of multimodal deep research: methods, open training data, benchmarks and reported results.">
+<script>try { var t = localStorage.getItem("ls-theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Same editorial palette as /litesearcher/: warm ink and paper, champagne gold and ice blue. Night default, Day via system or toggle. */
+:root {
+  color-scheme: dark;
+  --bg: #09090b; --bg-2: #101013; --surface: rgba(255,250,240,0.028); --surface-solid: #131316;
+  --ink: #f4f1ea; --ink-2: #b9b5ac; --ink-3: #7d7a73; --line: rgba(255,248,235,0.085);
+  --blue: #a9b9ff; --blue-soft: rgba(169,185,255,0.10); --violet: #c8b8ff; --cyan: #9fd8cb; --gold: #dcc08a; --rose: #e8a0bb; --amber: #e9ab80;
+  --bar-base: #3b3a38; --glow-a: rgba(120,138,255,0.30); --glow-b: rgba(220,192,138,0.16); --glow-c: rgba(176,150,255,0.20);
+  --grid: rgba(255,248,235,0.035); --grain: 0.06;
+  --lite: linear-gradient(100deg, #f3dfb2 0%, #dcc08a 34%, #a9b9ff 78%, #9fd8cb 100%); --rule: linear-gradient(90deg, #dcc08a, #a9b9ff);
+  --f-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif; --f-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --f-body: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  color-scheme: light;
+  --bg: #f6f3ec; --bg-2: #eeeae1; --surface: rgba(40,32,16,0.03); --surface-solid: #fffdf8;
+  --ink: #141311; --ink-2: #47443d; --ink-3: #7d786e; --line: rgba(40,32,16,0.11);
+  --blue: #2d43b3; --blue-soft: rgba(45,67,179,0.075); --violet: #5f46c2; --cyan: #1d7a6e; --gold: #9a742c; --rose: #b24d78; --amber: #c4682f;
+  --bar-base: #cfc9bd; --glow-a: rgba(80,100,230,0.16); --glow-b: rgba(190,150,70,0.16); --glow-c: rgba(140,110,230,0.12);
+  --grid: rgba(40,32,16,0.045); --grain: 0.045;
+  --lite: linear-gradient(100deg, #a8802f 0%, #8a6a2a 30%, #2d43b3 80%, #1d7a6e 100%); --rule: linear-gradient(90deg, #9a742c, #2d43b3); } }
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f6f3ec; --bg-2: #eeeae1; --surface: rgba(40,32,16,0.03); --surface-solid: #fffdf8;
+  --ink: #141311; --ink-2: #47443d; --ink-3: #7d786e; --line: rgba(40,32,16,0.11);
+  --blue: #2d43b3; --blue-soft: rgba(45,67,179,0.075); --violet: #5f46c2; --cyan: #1d7a6e; --gold: #9a742c; --rose: #b24d78; --amber: #c4682f;
+  --bar-base: #cfc9bd; --glow-a: rgba(80,100,230,0.16); --glow-b: rgba(190,150,70,0.16); --glow-c: rgba(140,110,230,0.12);
+  --grid: rgba(40,32,16,0.045); --grain: 0.045;
+  --lite: linear-gradient(100deg, #a8802f 0%, #8a6a2a 30%, #2d43b3 80%, #1d7a6e 100%); --rule: linear-gradient(90deg, #9a742c, #2d43b3); }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #09090b; --bg-2: #101013; --surface: rgba(255,250,240,0.028); --surface-solid: #131316;
+  --ink: #f4f1ea; --ink-2: #b9b5ac; --ink-3: #7d7a73; --line: rgba(255,248,235,0.085);
+  --blue: #a9b9ff; --blue-soft: rgba(169,185,255,0.10); --violet: #c8b8ff; --cyan: #9fd8cb; --gold: #dcc08a; --rose: #e8a0bb; --amber: #e9ab80;
+  --bar-base: #3b3a38; --glow-a: rgba(120,138,255,0.30); --glow-b: rgba(220,192,138,0.16); --glow-c: rgba(176,150,255,0.20);
+  --grid: rgba(255,248,235,0.035); --grain: 0.06;
+  --lite: linear-gradient(100deg, #f3dfb2 0%, #dcc08a 34%, #a9b9ff 78%, #9fd8cb 100%); --rule: linear-gradient(90deg, #dcc08a, #a9b9ff); }
+
+*, *::before, *::after { box-sizing: border-box; }
+body::before { content: ""; position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: var(--grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); mix-blend-mode: overlay; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; overflow-x: hidden; transition: background-color .35s, color .35s; }
+a { color: var(--blue); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 4px; }
+
+/* top bar */
+.bar { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; gap: 12px; padding: 10px 20px; border-bottom: 1px solid transparent;
+  background: color-mix(in srgb, var(--bg) 72%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: border-color .3s; }
+.bar.scrolled { border-bottom-color: var(--line); }
+.bar .brand { font: 600 0.92rem var(--f-display); color: var(--ink); text-decoration: none; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar .brand em { font-family: var(--f-serif); font-weight: 400; font-size: 1.08em; }
+.bar .sp { flex: 1; }
+.seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
+.seg button { all: unset; cursor: pointer; padding: 5px 10px; border-radius: 999px; font: 500 0.7rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.star { display: inline-flex; align-items: center; gap: 0; text-decoration: none; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; font: 600 0.8rem var(--f-body); color: var(--ink); background: var(--surface-solid); transition: border-color .25s, transform .25s; }
+.star:hover { border-color: var(--gold); transform: translateY(-1px); }
+.star .l { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; }
+.star .n { padding: 6px 11px; border-left: 1px solid var(--line); font-family: var(--f-mono); font-weight: 500; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.star svg { width: 14px; height: 14px; color: var(--gold); }
+.star.big { font-size: 0.95rem; } .star.big .l, .star.big .n { padding: 10px 16px; }
+
+/* hero */
+.hero { position: relative; isolation: isolate; overflow: hidden; padding: 72px 20px 56px; border-bottom: 1px solid var(--line); }
+.hero::before { content: ""; position: absolute; inset: -30% -10% auto -10%; height: 150%; z-index: -2;
+  background: radial-gradient(40% 45% at 20% 30%, var(--glow-a), transparent 70%), radial-gradient(35% 40% at 82% 25%, var(--glow-c), transparent 70%), radial-gradient(45% 40% at 60% 90%, var(--glow-b), transparent 70%); filter: blur(30px); }
+.hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 44px 44px; mask-image: radial-gradient(70% 70% at 50% 40%, #000 40%, transparent 100%); -webkit-mask-image: radial-gradient(70% 70% at 50% 40%, #000 40%, transparent 100%); }
+.wrap { max-width: 1120px; margin: 0 auto; }
+.kicker { font: 500 0.74rem var(--f-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+.chip { display: inline-flex; align-items: center; gap: 8px; font: 500 0.74rem var(--f-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2); border: 1px solid var(--line); background: var(--surface); padding: 6px 12px; border-radius: 999px; }
+.chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px var(--gold); }
+h1 { font: 700 clamp(2.4rem, 7vw, 4.6rem)/1.02 var(--f-display); letter-spacing: -0.035em; margin: 22px 0 18px; text-wrap: balance; }
+h1 .aw { display: block; font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; font-size: 0.64em; background: var(--lite); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: .05em; }
+.dek { font-size: clamp(1.05rem, 2.2vw, 1.3rem); line-height: 1.5; color: var(--ink-2); max-width: 46ch; margin: 0 0 26px; text-wrap: balance; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn { font: 600 0.9rem var(--f-body); text-decoration: none; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: 10px 18px; background: var(--surface); cursor: pointer; transition: border-color .25s, transform .25s; }
+.btn:hover { border-color: var(--blue); transform: translateY(-1px); }
+.btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; margin-top: 44px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--line); }
+.stat { background: color-mix(in srgb, var(--bg) 84%, transparent); padding: 16px 18px; min-width: 0; }
+.stat .num { font: 600 2rem/1.1 var(--f-display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.stat .lbl { font: 500 0.7rem var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-top: 6px; }
+.stat:first-child .num { background: var(--lite); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* sections */
+main { padding: 0 20px 40px; }
+section.s { max-width: 1120px; margin: 0 auto; padding-top: 72px; }
+h2 { font: 600 clamp(1.5rem, 3.2vw, 2rem)/1.2 var(--f-display); letter-spacing: -0.02em; margin: 0 0 8px; }
+h2::before { content: ""; display: block; width: 36px; height: 1px; margin-bottom: 18px; background: var(--rule); }
+.lead { color: var(--ink-2); max-width: 68ch; margin: 0 0 22px; }
+.note { font-size: 0.82rem; color: var(--ink-3); margin-top: 10px; }
+.panel { border: 1px solid var(--line); border-radius: 16px; background: var(--surface); padding: 18px; min-width: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+.panel h3 { font: 500 0.72rem var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 12px; }
+svg text { font-family: var(--f-body); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.78rem; color: var(--ink-3); margin-top: 10px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.tabs button, .chips button { font: 600 0.8rem var(--f-body); color: var(--ink-2); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; cursor: pointer; transition: border-color .2s, color .2s, background .2s; }
+.tabs button:hover, .chips button:hover { border-color: var(--blue); color: var(--ink); }
+.tabs button[aria-pressed="true"], .chips button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
+th, td { padding: 9px 13px; border-bottom: 1px solid var(--line); text-align: left; color: var(--ink-2); vertical-align: top; }
+td.r, th.r { text-align: right; }
+thead th { font: 600 0.68rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; cursor: default; }
+thead th[data-k] { cursor: pointer; } thead th[data-k]:hover { color: var(--ink); }
+tbody tr:last-child td { border-bottom: 0; }
+tr.ours td { background: var(--blue-soft); color: var(--ink); font-weight: 600; }
+.tag { display: inline-block; font: 500 0.68rem var(--f-mono); letter-spacing: 0.04em; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-2); margin: 0 4px 3px 0; white-space: nowrap; }
+.tag.g { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 40%, var(--line)); }
+.tag.b { color: var(--blue); border-color: color-mix(in srgb, var(--blue) 40%, var(--line)); }
+
+/* data cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.dcard { border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; background: var(--surface-solid); min-width: 0; display: flex; flex-direction: column; gap: 6px; transition: border-color .25s, transform .25s; }
+.dcard:hover { border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); transform: translateY(-2px); }
+.dcard .nm { font: 600 1.02rem/1.3 var(--f-display); color: var(--ink); }
+.dcard .sz { font: 600 1.35rem var(--f-display); letter-spacing: -0.02em; background: var(--lite); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.dcard .t { font-size: 0.84rem; color: var(--ink-2); line-height: 1.45; flex: 1; }
+.dcard .ln { font: 500 0.76rem var(--f-mono); display: flex; gap: 12px; flex-wrap: wrap; }
+.dcard .ln a { text-decoration: none; }
+
+/* explorer */
+.tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+.search { flex: 1 1 260px; min-width: 0; font: 0.95rem var(--f-body); color: var(--ink); background: var(--surface-solid); border: 1px solid var(--line); border-radius: 999px; padding: 10px 16px; }
+.search::placeholder { color: var(--ink-3); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.count { font: 500 0.78rem var(--f-mono); color: var(--ink-3); margin: 4px 0 12px; }
+.list { display: grid; gap: 10px; }
+.p { border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; background: var(--surface-solid); min-width: 0; }
+.p .h { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.p .ti { font: 600 1rem/1.35 var(--f-display); color: var(--ink); text-decoration: none; overflow-wrap: anywhere; }
+.p .ti:hover { color: var(--blue); }
+.p .m { font-size: 0.8rem; color: var(--ink-3); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; }
+.p .m img { height: 18px; vertical-align: middle; }
+.p .tl { font-size: 0.88rem; color: var(--ink-2); margin: 8px 0 0; }
+.more-btn { margin: 14px auto 0; display: block; }
+
+/* submit dialog */
+dialog { border: 1px solid var(--line); border-radius: 18px; background: var(--surface-solid); color: var(--ink); padding: 24px; max-width: 520px; width: calc(100% - 32px); }
+dialog::backdrop { background: rgba(0,0,0,.45); backdrop-filter: blur(3px); }
+dialog ol { color: var(--ink-2); padding-left: 20px; }
+dialog h3 { font: 600 1.3rem var(--f-display); margin: 0 0 6px; }
+
+/* more reading (shared /series.js) */
+.more { border-top: 1px solid var(--line); background: var(--bg-2); padding: 8px 20px 64px; margin-top: 80px; }
+.more-inner { max-width: 1120px; margin: 0 auto; } .more h2 { margin-top: 56px; }
+.mr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 22px; }
+.mr-card { display: flex; flex-direction: column; min-width: 0; text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--surface-solid); transition: transform .35s cubic-bezier(.2,.7,.2,1), border-color .35s, box-shadow .35s; }
+a.mr-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); box-shadow: 0 18px 40px -24px color-mix(in srgb, var(--ink) 45%, transparent); }
+.mr-art { aspect-ratio: 16 / 9; display: grid; place-items: center; color: var(--ink); background: radial-gradient(70% 90% at 15% 10%, var(--glow-a), transparent 70%), radial-gradient(60% 80% at 90% 100%, var(--glow-b), transparent 70%), var(--bg); }
+.mr-art svg { width: 62%; height: auto; }
+.mr-harness { color: var(--blue); } .mr-unisearcher { color: var(--violet); } .mr-toolsmith { color: var(--gold); } .mr-litesearcher { color: var(--cyan); } .mr-awesome { color: var(--rose); }
+.mr-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.mr-kind { font: 500 0.7rem var(--f-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+.mr-title { font: 600 1.2rem/1.25 var(--f-display); color: var(--ink); }
+.mr-blurb { font-size: 0.9rem; line-height: 1.55; margin: 0; color: var(--ink-2); flex: 1; }
+.mr-go { font: 500 0.8rem var(--f-mono); color: var(--ink-3); margin-top: 8px; }
+.mr-card.soon { opacity: .72; }
+.foot { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 0.84rem; color: var(--ink-3); }
+@media (max-width: 560px) { .bar .seg { display: none; } .star .n { display: none; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="bar" id="bar">
+  <a class="brand" href="#top"><em>Awesome</em> Multimodal Deep Research</a>
+  <span class="sp"></span>
+  <div class="seg" role="group" aria-label="Color theme"><button type="button" data-set="light">Day</button><button type="button" data-set="dark">Night</button></div>
+  <a class="star" href="https://github.com/uclanlp/OpenVLHarness" target="_blank" rel="noopener" aria-label="Star OpenVLHarness on GitHub">
+    <span class="l"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>Star</span><span class="n" data-stars>OpenVLHarness</span>
+  </a>
+</div>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <span class="chip"><span class="dot"></span>An OpenVLHarness project · Preview</span>
+    <h1><span class="aw">Awesome</span>Multimodal Deep Research</h1>
+    <p class="dek">A living map of agents that look, search and reason: methods, open training data, benchmarks and the numbers they report.</p>
+    <div class="cta">
+      <a class="star big" href="https://github.com/uclanlp/OpenVLHarness" target="_blank" rel="noopener" aria-label="Star OpenVLHarness on GitHub">
+        <span class="l"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>Star OpenVLHarness</span><span class="n" data-stars>GitHub</span>
+      </a>
+      <button class="btn primary" type="button" id="submit-open">Submit a paper</button>
+      <a class="btn" href="#explore">Browse the list</a>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<main>
+  <section class="s" id="timeline">
+    <h2>A field that took off in 2025</h2>
+    <p class="lead">Every entry by month of first release, split into methods, open training data and benchmarks. Bars stack, so the height is the number of new entries that month.</p>
+    <div class="panel"><div id="tl-chart"></div><div class="legend" id="tl-legend"></div></div>
+  </section>
+
+  <section class="s" id="recipes">
+    <h2>How the agents are trained</h2>
+    <p class="lead">For the multimodal agents we track with a known recipe, the training pipeline and the backbone family. SFT followed by RL is the default, and almost everything is built on Qwen.</p>
+    <div class="grid2">
+      <div class="panel"><h3>Training pipeline</h3><div id="pipe-chart"></div></div>
+      <div class="panel"><h3>Backbone family</h3><div id="bb-chart"></div></div>
+    </div>
+  </section>
+
+  <section class="s" id="results">
+    <h2>Reported results</h2>
+    <p class="lead">Accuracy against total parameters, as each paper reports it. Setups differ between papers (tools, judges, turn budgets), so read these as a map of claims, not a controlled comparison. A shared evaluation in OpenVLHarness is the next step.</p>
+    <div class="tabs" id="res-tabs"></div>
+    <div class="grid2">
+      <div class="panel"><div id="res-chart"></div><div class="legend"><span><i style="background:var(--blue)"></i>LiteSearcher (ours)</span><span><i style="background:var(--bar-base)"></i>Published agents</span><span><i style="background:var(--gold)"></i>Pareto frontier</span></div></div>
+      <div class="scroll" style="max-height:420px"><table id="res-table"></table></div>
+    </div>
+  </section>
+
+  <section class="s" id="data">
+    <h2>Open training data</h2>
+    <p class="lead">Datasets you can train a multimodal search agent on today, with their size and the stage they are meant for.</p>
+    <div class="chips" id="data-chips" style="margin-bottom:14px"></div>
+    <div class="cards" id="data-cards"></div>
+  </section>
+
+  <section class="s" id="benchmarks">
+    <h2>Benchmarks</h2>
+    <p class="lead">What the field evaluates on, by input and output type. Click a column to sort.</p>
+    <div class="chips" id="bm-chips" style="margin-bottom:14px"></div>
+    <div class="scroll"><table id="bm-table"></table></div>
+    <p class="note">Input: SI single image, MI multiple images, TX text. Output: SA short answer, Report long-form report, SI generated image, VA visual artifacts.</p>
+  </section>
+
+  <section class="s" id="explore">
+    <h2>Explore the list</h2>
+    <p class="lead">Every paper, searchable. Each entry links to the paper and code, with a one-line summary where we have one.</p>
+    <div class="tools"><input class="search" id="q" type="search" placeholder="Search titles, organizations, backbones…" aria-label="Search the list"><div class="chips" id="kind-chips"></div></div>
+    <div class="count" id="count"></div>
+    <div class="list" id="list"></div>
+    <button class="btn more-btn" type="button" id="more">Show more</button>
+  </section>
+</main>
+
+<section class="more" aria-labelledby="more-reading">
+  <div class="more-inner">
+    <h2 id="more-reading">More reading</h2>
+    <div class="mr-grid" id="more-grid"></div>
+    <div class="foot">Curated by the <a href="https://openvlharness.github.io/">OpenVLHarness</a> team. Preview build; data as of <span id="built"></span>.</div>
+  </div>
+</section>
+
+<dialog id="submit">
+  <h3>Submit a paper</h3>
+  <p style="color:var(--ink-2);margin:0 0 8px">Preview of the submission flow:</p>
+  <ol>
+    <li>Paste an arXiv link and pick a category. Code link, training data and benchmarks are optional.</li>
+    <li>We open a pull request with the entry filled in from arXiv.</li>
+    <li>A maintainer reviews and merges it, and the page updates on its own.</li>
+  </ol>
+  <p style="color:var(--ink-3);font-size:.86rem">Submissions open when the list moves to its permanent home. While you wait, a star helps us a lot.</p>
+  <div class="cta" style="margin-top:14px"><a class="btn primary" href="https://github.com/uclanlp/OpenVLHarness" target="_blank" rel="noopener">★ Star OpenVLHarness</a><button class="btn" type="button" id="submit-close">Close</button></div>
+</dialog>
+
+<script src="atlas.js"></script>
+<script src="/series.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
