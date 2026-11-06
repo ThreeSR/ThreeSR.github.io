@@ -7,40 +7,73 @@
 <title>Introducing LiteSearcher</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script>try { var t = localStorage.getItem("ls-theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
 <style>
-/* Layout: full-bleed dark hero (aurora glow + live search-graph canvas + stat strip), then a ~70ch reading column.
-   Dark-first; a light variant follows the viewer's theme. Blue = ours, violet/cyan = the aurora accents. */
+/* Editorial palette: warm ink and paper, champagne gold and ice blue accents. Night is the default;
+   Day follows the viewer's system theme, and the toggle (data-theme on <html>) overrides both. */
 :root {
   color-scheme: dark;
-  --bg: #07080c; --bg-2: #0c0e14; --surface: rgba(255,255,255,0.035); --surface-solid: #11141b;
-  --ink: #f2f4f8; --ink-2: #aab1bf; --ink-3: #6f7787; --line: rgba(255,255,255,0.09);
-  --blue: #6aa8ff; --blue-soft: rgba(106,168,255,0.12); --violet: #9b7bff; --cyan: #4fe3d6; --gold: #f2c46d;
-  --bar-base: #3a404c; --tbd-bg: rgba(242,196,109,0.16); --tbd-ink: #f2c46d;
-  --glow-a: rgba(106,120,255,0.55); --glow-b: rgba(79,227,214,0.35); --glow-c: rgba(155,123,255,0.45);
-  --grid: rgba(255,255,255,0.045);
+  --bg: #09090b; --bg-2: #101013; --surface: rgba(255,250,240,0.028); --surface-solid: #131316;
+  --ink: #f4f1ea; --ink-2: #b9b5ac; --ink-3: #7d7a73; --line: rgba(255,248,235,0.085);
+  --blue: #a9b9ff; --blue-soft: rgba(169,185,255,0.10); --violet: #c8b8ff; --cyan: #9fd8cb; --gold: #dcc08a;
+  --bar-base: #3b3a38; --tbd-bg: rgba(220,192,138,0.14); --tbd-ink: #e2c995;
+  --glow-a: rgba(120,138,255,0.30); --glow-b: rgba(220,192,138,0.16); --glow-c: rgba(176,150,255,0.20);
+  --grid: rgba(255,248,235,0.035); --grain: 0.06;
+  --lite: linear-gradient(100deg, #f3dfb2 0%, #dcc08a 34%, #a9b9ff 78%, #9fd8cb 100%);
+  --rule: linear-gradient(90deg, #dcc08a, #a9b9ff);
+  --t-text: #a9b9ff; --t-web: #9fd8cb; --t-image: #c8b8ff; --t-zoom: #e9ab80; --t-ocr: #dcc08a; --t-ground: #e8a0bb; --t-code: #9c9aa3; --t-bad: #e0706a;
   --f-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --f-serif: "Instrument Serif", ui-serif, Georgia, serif;
   --f-body: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 }
 @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
   color-scheme: light;
-  --bg: #f7f8fb; --bg-2: #eef0f6; --surface: rgba(10,20,50,0.035); --surface-solid: #ffffff;
-  --ink: #0b0d12; --ink-2: #3f4655; --ink-3: #6b7383; --line: rgba(10,20,50,0.10);
-  --blue: #1f5fd1; --blue-soft: rgba(31,95,209,0.09); --violet: #6a4fe0; --cyan: #0e9f94; --gold: #9a6a12;
-  --bar-base: #c4c9d3; --tbd-bg: #fff1cf; --tbd-ink: #7a5500;
-  --glow-a: rgba(90,110,255,0.28); --glow-b: rgba(20,190,180,0.20); --glow-c: rgba(140,100,255,0.22);
-  --grid: rgba(10,20,50,0.05); } }
+  --bg: #f6f3ec; --bg-2: #eeeae1; --surface: rgba(40,32,16,0.03); --surface-solid: #fffdf8;
+  --ink: #141311; --ink-2: #47443d; --ink-3: #7d786e; --line: rgba(40,32,16,0.11);
+  --blue: #2d43b3; --blue-soft: rgba(45,67,179,0.075); --violet: #5f46c2; --cyan: #1d7a6e; --gold: #9a742c;
+  --bar-base: #cfc9bd; --tbd-bg: #f6e6c2; --tbd-ink: #7a5714;
+  --glow-a: rgba(80,100,230,0.16); --glow-b: rgba(190,150,70,0.16); --glow-c: rgba(140,110,230,0.12);
+  --grid: rgba(40,32,16,0.045); --grain: 0.045;
+  --lite: linear-gradient(100deg, #a8802f 0%, #8a6a2a 30%, #2d43b3 80%, #1d7a6e 100%);
+  --rule: linear-gradient(90deg, #9a742c, #2d43b3);
+  --t-text: #3049c0; --t-web: #1f8a7d; --t-image: #7350cc; --t-zoom: #c4682f; --t-ocr: #9a742c; --t-ground: #b24d78; --t-code: #6e6c75; --t-bad: #c0443d; } }
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg: #f7f8fb; --bg-2: #eef0f6; --surface: rgba(10,20,50,0.035); --surface-solid: #ffffff;
-  --ink: #0b0d12; --ink-2: #3f4655; --ink-3: #6b7383; --line: rgba(10,20,50,0.10);
-  --blue: #1f5fd1; --blue-soft: rgba(31,95,209,0.09); --violet: #6a4fe0; --cyan: #0e9f94; --gold: #9a6a12;
-  --bar-base: #c4c9d3; --tbd-bg: #fff1cf; --tbd-ink: #7a5500;
-  --glow-a: rgba(90,110,255,0.28); --glow-b: rgba(20,190,180,0.20); --glow-c: rgba(140,100,255,0.22);
-  --grid: rgba(10,20,50,0.05); }
+  --bg: #f6f3ec; --bg-2: #eeeae1; --surface: rgba(40,32,16,0.03); --surface-solid: #fffdf8;
+  --ink: #141311; --ink-2: #47443d; --ink-3: #7d786e; --line: rgba(40,32,16,0.11);
+  --blue: #2d43b3; --blue-soft: rgba(45,67,179,0.075); --violet: #5f46c2; --cyan: #1d7a6e; --gold: #9a742c;
+  --bar-base: #cfc9bd; --tbd-bg: #f6e6c2; --tbd-ink: #7a5714;
+  --glow-a: rgba(80,100,230,0.16); --glow-b: rgba(190,150,70,0.16); --glow-c: rgba(140,110,230,0.12);
+  --grid: rgba(40,32,16,0.045); --grain: 0.045;
+  --lite: linear-gradient(100deg, #a8802f 0%, #8a6a2a 30%, #2d43b3 80%, #1d7a6e 100%);
+  --rule: linear-gradient(90deg, #9a742c, #2d43b3);
+  --t-text: #3049c0; --t-web: #1f8a7d; --t-image: #7350cc; --t-zoom: #c4682f; --t-ocr: #9a742c; --t-ground: #b24d78; --t-code: #6e6c75; --t-bad: #c0443d; }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #09090b; --bg-2: #101013; --surface: rgba(255,250,240,0.028); --surface-solid: #131316;
+  --ink: #f4f1ea; --ink-2: #b9b5ac; --ink-3: #7d7a73; --line: rgba(255,248,235,0.085);
+  --blue: #a9b9ff; --blue-soft: rgba(169,185,255,0.10); --violet: #c8b8ff; --cyan: #9fd8cb; --gold: #dcc08a;
+  --bar-base: #3b3a38; --tbd-bg: rgba(220,192,138,0.14); --tbd-ink: #e2c995;
+  --glow-a: rgba(120,138,255,0.30); --glow-b: rgba(220,192,138,0.16); --glow-c: rgba(176,150,255,0.20);
+  --grid: rgba(255,248,235,0.035); --grain: 0.06;
+  --lite: linear-gradient(100deg, #f3dfb2 0%, #dcc08a 34%, #a9b9ff 78%, #9fd8cb 100%);
+  --rule: linear-gradient(90deg, #dcc08a, #a9b9ff);
+  --t-text: #a9b9ff; --t-web: #9fd8cb; --t-image: #c8b8ff; --t-zoom: #e9ab80; --t-ocr: #dcc08a; --t-ground: #e8a0bb; --t-code: #9c9aa3; --t-bad: #e0706a; }
 
 *, *::before, *::after { box-sizing: border-box; }
+body::before { content: ""; position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: var(--grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); mix-blend-mode: overlay; }
+.theme-toggle { position: fixed; top: 16px; right: 16px; z-index: 50; display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px;
+  border: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 70%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.theme-toggle button { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 999px;
+  font: 500 0.72rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); transition: color .25s, background .25s; }
+.theme-toggle button:hover { color: var(--ink); }
+.theme-toggle button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.theme-toggle svg { width: 13px; height: 13px; }
+.theme-toggle button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+body, .card, .chart, .scroll, .traj, .tldr, .stat, .links a { transition: background-color .35s ease, border-color .35s ease, color .35s ease; }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.72; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 a { color: var(--blue); text-underline-offset: 3px; }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 4px; }
@@ -60,9 +93,10 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-
 .kicker { font: 500 0.76rem var(--f-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
 .chip { display: inline-flex; align-items: center; gap: 8px; font: 500 0.76rem var(--f-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2);
   border: 1px solid var(--line); background: var(--surface); backdrop-filter: blur(8px); padding: 6px 12px; border-radius: 999px; }
-.chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+.chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px var(--gold); }
+h1 .intro { display: block; font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; color: var(--ink-2); font-size: 0.62em; margin-bottom: 0.12em; }
 h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(2.6rem, 8vw, 5.2rem); line-height: 1.0; letter-spacing: -0.035em; margin: 22px 0 18px; text-wrap: balance; }
-h1 .lite { background: linear-gradient(100deg, var(--blue), var(--violet) 45%, var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+h1 .lite { background: var(--lite); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .dek { font-size: clamp(1.1rem, 2.4vw, 1.4rem); line-height: 1.5; color: var(--ink-2); margin: 0 0 26px; max-width: 40ch; text-wrap: balance; }
 .byline { display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 0.9rem; color: var(--ink-3); }
 .byline strong { color: var(--ink); font-weight: 600; }
@@ -78,18 +112,18 @@ h1 .lite { background: linear-gradient(100deg, var(--blue), var(--violet) 45%, v
 .stat .num { font: 600 2.1rem/1.1 var(--f-display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .stat .num small { font-size: 0.5em; color: var(--ink-3); margin-left: 4px; font-weight: 500; }
 .stat .lbl { font: 500 0.72rem var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-top: 6px; }
-.stat:nth-child(3) .num { background: linear-gradient(100deg, var(--blue), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.stat:nth-child(3) .num { background: var(--lite); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
 /* ---------- article ---------- */
 .page { max-width: 760px; margin: 0 auto; padding-inline: 20px; padding-block: 48px 96px; }
 h2 { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.5rem, 3.4vw, 1.9rem); letter-spacing: -0.02em; margin: 72px 0 12px; text-wrap: balance; }
-h2::before { content: ""; display: block; width: 36px; height: 2px; margin-bottom: 18px; background: linear-gradient(90deg, var(--blue), var(--cyan)); }
+h2::before { content: ""; display: block; width: 36px; height: 1px; margin-bottom: 18px; background: var(--rule); }
 h3 { font-family: var(--f-display); font-weight: 600; font-size: 1.18rem; margin: 34px 0 6px; }
 p { margin: 0 0 16px; color: var(--ink-2); }
 p b, li b { color: var(--ink); }
 ul { color: var(--ink-2); }
 .tldr { position: relative; border: 1px solid var(--line); background: var(--surface); border-radius: 16px; padding: 22px 24px; margin: 0; }
-.tldr::before { content: ""; position: absolute; inset: -1px; border-radius: 16px; padding: 1px; background: linear-gradient(120deg, var(--blue), transparent 40%, transparent 60%, var(--cyan));
+.tldr::before { content: ""; position: absolute; inset: -1px; border-radius: 16px; padding: 1px; background: linear-gradient(120deg, var(--gold), transparent 38%, transparent 62%, var(--blue));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
 .tldr .kicker { color: var(--blue); }
 .tldr ul { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 8px; }
@@ -158,11 +192,15 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
 </head>
 <body>
 
+<div class="theme-toggle" role="group" aria-label="Color theme">
+  <button type="button" data-set="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>Day</button>
+  <button type="button" data-set="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>Night</button>
+</div>
 <header class="hero">
   <canvas id="graph" aria-hidden="true"></canvas>
   <div class="hero-inner">
     <span class="chip"><span class="dot"></span>OpenVLHarness · Release · <span class="tbd">[TBD: date]</span></span>
-    <h1>Introducing<br><span class="lite">Lite</span>Searcher</h1>
+    <h1><span class="intro">Introducing</span><span class="lite">Lite</span>Searcher</h1>
     <p class="dek">Multimodal search agents at 0.8B, 2B and 4B parameters, with the training data, trajectories and harness to rebuild them.</p>
     <div class="byline"><a href="https://threesr.github.io/" target="_blank" rel="noopener"><strong>Rui Sun</strong></a><span class="sep">·</span><a href="https://openvlharness.github.io/" target="_blank" rel="noopener">OpenVLHarness Team</a><span class="sep">·</span><a href="https://web.cs.ucla.edu/~kwchang/" target="_blank" rel="noopener">UCLA NLP</a></div>
     <div class="links">
@@ -375,7 +413,7 @@ python run_benchmark.py --config <span class="tbd">[TBD: release config]</span> 
     s += '<polyline points="' + oursPts.map(function (p) { return lx(p.x) + "," + ly(p.y); }).join(" ") + '" fill="none" stroke="var(--blue)" stroke-width="2"/>';
     oursPts.forEach(function (p) {
       s += '<circle cx="' + lx(p.x) + '" cy="' + ly(p.y) + '" r="5.5" fill="var(--blue)" stroke="var(--bg)" stroke-width="1.5"><title>' + p.n + ': ' + p.y + '</title></circle>';
-      s += '<text x="' + (lx(p.x) - 8) + '" y="' + (ly(p.y) - 9) + '" text-anchor="middle" fill="var(--blue)" font-weight="600">' + p.n.replace("Lite-", "") + '</text>';
+      s += '<text x="' + (lx(p.x) - 8) + '" y="' + (ly(p.y) - 9) + '" text-anchor="middle" fill="var(--blue)" font-weight="600">' + p.n.replace("LiteSearcher-", "") + '</text>';
     });
     document.getElementById(id).innerHTML = s + "</svg>";
   }
@@ -411,7 +449,23 @@ python run_benchmark.py --config <span class="tbd">[TBD: release config]</span> 
   }
   size(); frame();
   window.addEventListener("resize", function () { size(); if (still) frame(); });
+  window.addEventListener("ls-theme", function () { if (still) frame(); });
   document.addEventListener("visibilitychange", function () { if (!document.hidden && !still) requestAnimationFrame(frame); });
+})();
+</script>
+<script>
+(function () {
+  var root = document.documentElement, btns = document.querySelectorAll(".theme-toggle button");
+  var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: light)") : null;
+  function current() { return root.getAttribute("data-theme") || (mq && mq.matches ? "light" : "dark"); }
+  function sync() { var c = current(); btns.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.set === c); }); window.dispatchEvent(new Event("ls-theme")); }
+  btns.forEach(function (b) { b.addEventListener("click", function () {
+    root.setAttribute("data-theme", b.dataset.set);
+    try { localStorage.setItem("ls-theme", b.dataset.set); } catch (e) {}
+    sync();
+  }); });
+  if (mq && mq.addEventListener) mq.addEventListener("change", function () { if (!root.getAttribute("data-theme")) sync(); });
+  sync();
 })();
 </script>
 <script src="content.js"></script>
