@@ -296,7 +296,7 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
   </figure>
 
   <h3 id="more-benchmarks">Beyond search benchmarks</h3>
-  <p>Search training should not cost the model its general visual knowledge. We also run the common knowledge-intensive VQA benchmarks and the newer deep-research suites, with the same three settings and the same harness.</p>
+  <p>To see how the models do outside the three search benchmarks, we also run the common knowledge-intensive VQA benchmarks and the newer deep-research suites, with the same three settings and the same harness.</p>
   <figure>
     <div class="scroll"><table id="tbl-vqa"></table></div>
     <div class="scroll" style="margin-top:12px"><table id="tbl-dr"></table></div>
@@ -344,7 +344,7 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
   </figure>
 
   <h2 id="tool-use">How the agents use their tools</h2>
-  <p>Fine-tuning changes how often and how widely the small models use their tools. On MMSearch-Plus, the base 0.8B model makes no tool call in 27.3% of episodes and 1.7 calls on average. After SFT it skips tools in 4.5% of episodes and makes 8.9 calls, spread over more distinct tools (2.4 against 1.1 per episode). The base models also call tools that do not exist, such as <code>image_search_tool</code> or <code>Answer</code>; after SFT this almost disappears. At 4B the base model already searches a lot, and SFT mainly shifts the mix toward image tools: zoom-in rises from 3.2% to 18.2% of calls on MMSearch-Plus.</p>
+  <p>Fine-tuning changes how often and how widely the small models use their tools. On MMSearch-Plus, the base 0.8B model makes no tool call in 27.3% of episodes and 1.7 calls on average. After SFT it skips tools in 4.5% of episodes and makes 8.9 calls, spread over more distinct tools (2.4 against 1.1 per episode). The base models also call tools that do not exist, such as <code>image_search_tool</code> or <code>Answer</code>; after SFT this almost disappears. At 4B the base model already searches a lot, and SFT mainly shifts the mix toward image tools: zoom-in rises from 3.2% to 18.2% of calls on MMSearch-Plus. It also opens fewer pages (329 page visits on MMSearch before SFT, 145 after), and these page visits are where the base 4B model wins back the few points it leads by.</p>
   <div class="tabs" role="tablist" id="ts-tabs"></div>
   <figure>
     <div class="scroll"><table id="tbl-tools"></table></div>

@@ -7,8 +7,8 @@
     vqa: { cols: ["SimpleVQA", "WorldVQA", "FVQA", "InfoSeek"], keys: ["SimpleVQA_EN", "WorldVQA_VDR300", "FVQA_VDR300", "Infoseek_VDR300"] },
     dr:  { cols: ["MM-BrowseComp", "BrowseComp-V3", "VDR-Bench", "HR-MMSearch", "RealX-Bench", "HLE"], keys: ["MMBrowseComp", "BrowseCompV3", "VDRBench", "HRMMSearch", "RealXBench", "hle"] },
     rows: [
-      ["Qwen3.5-0.8B", "Direct Answer", {}], ["Qwen3.5-0.8B", "Agent Workflow", { SimpleVQA_EN: 48.67 }], ["LiteSearcher-0.8B", "SFT", { SimpleVQA_EN: 57.00 }],
-      ["Qwen3.5-2B", "Direct Answer", {}], ["Qwen3.5-2B", "Agent Workflow", { SimpleVQA_EN: 61.33 }], ["LiteSearcher-2B", "SFT", { SimpleVQA_EN: 65.00 }],
+      ["Qwen3.5-0.8B", "Direct Answer", {}], ["Qwen3.5-0.8B", "Agent Workflow", { SimpleVQA_EN: 48.67, FVQA_VDR300: 32.33 }], ["LiteSearcher-0.8B", "SFT", { SimpleVQA_EN: 57.00 }],
+      ["Qwen3.5-2B", "Direct Answer", { SimpleVQA_EN: 48.00 }], ["Qwen3.5-2B", "Agent Workflow", { SimpleVQA_EN: 61.33 }], ["LiteSearcher-2B", "SFT", { SimpleVQA_EN: 65.00 }],
       ["Qwen3.5-4B", "Direct Answer", {}], ["Qwen3.5-4B", "Agent Workflow", { SimpleVQA_EN: 78.67, FVQA_VDR300: 70.33 }], ["LiteSearcher-4B", "SFT", { SimpleVQA_EN: 75.33 }]
     ]
   };
