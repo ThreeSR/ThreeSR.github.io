@@ -184,6 +184,25 @@ tr.sep td { font: 600 0.72rem var(--f-mono); letter-spacing: 0.08em; text-transf
 #tbl-tools th { font-size: 0.66rem; letter-spacing: 0.04em; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.78rem; color: var(--ink-3); margin-top: 10px; }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+.more { border-top: 1px solid var(--line); background: var(--bg-2); padding: 8px 20px 72px; }
+.more-inner { max-width: 1080px; margin: 0 auto; }
+.more h2 { margin-top: 56px; }
+.mr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 22px; }
+.mr-card { display: flex; flex-direction: column; min-width: 0; text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--surface-solid);
+  transition: transform .35s cubic-bezier(.2,.7,.2,1), border-color .35s, box-shadow .35s; }
+a.mr-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); box-shadow: 0 18px 40px -24px color-mix(in srgb, var(--ink) 45%, transparent); }
+.mr-art { aspect-ratio: 16 / 9; display: grid; place-items: center; color: var(--ink); position: relative; overflow: hidden;
+  background: radial-gradient(70% 90% at 15% 10%, var(--glow-a), transparent 70%), radial-gradient(60% 80% at 90% 100%, var(--glow-b), transparent 70%), var(--bg); }
+.mr-art svg { width: 62%; height: auto; }
+.mr-harness { color: var(--blue); } .mr-unisearcher { color: var(--violet); } .mr-toolsmith { color: var(--gold); } .mr-litesearcher { color: var(--cyan); }
+.mr-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.mr-kind { font: 500 0.7rem var(--f-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+.mr-title { font: 600 1.25rem/1.25 var(--f-display); letter-spacing: -0.015em; color: var(--ink); }
+.mr-blurb { font-size: 0.9rem; line-height: 1.55; margin: 0; color: var(--ink-2); flex: 1; }
+.mr-go { font: 500 0.8rem var(--f-mono); color: var(--ink-3); margin-top: 8px; transition: color .25s; }
+a.mr-card:hover .mr-go { color: var(--ink); }
+.mr-card.soon { opacity: .72; }
+@media (prefers-reduced-motion: reduce) { .mr-card { transition: none; } }
 pre { background: var(--surface-solid); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; overflow-x: auto; font: 0.84rem/1.65 var(--f-mono); color: var(--ink-2); }
 code { font-family: var(--f-mono); font-size: 0.88em; }
 .foot { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 0.86rem; color: var(--ink-3); }
@@ -361,8 +380,15 @@ python run_benchmark.py --config <span class="tbd">[TBD: release config]</span> 
   <h2 id="cite">Citation</h2>
 <pre><code><span class="tbd">[TBD: BibTeX for UniSearcher / OpenVLHarness]</span></code></pre>
 
-  <div class="foot">Part of the <a href="https://openvlharness.github.io/">OpenVLHarness</a> family, alongside <a href="https://threesr.github.io/toolsmith/">ToolSmith</a>.</div>
 </article>
+
+<section class="more" aria-labelledby="more-reading">
+  <div class="more-inner">
+    <h2 id="more-reading">More reading</h2>
+    <div class="mr-grid" id="more-grid"></div>
+    <div class="foot">Part of the <a href="https://openvlharness.github.io/">OpenVLHarness</a> family.</div>
+  </div>
+</section>
 
 <script>
 (function () {
@@ -468,6 +494,8 @@ python run_benchmark.py --config <span class="tbd">[TBD: release config]</span> 
   sync();
 })();
 </script>
+<script src="/series.js"></script>
+<script>if (window.OVH_SERIES) OVH_SERIES.render(document.getElementById("more-grid"), "litesearcher");</script>
 <script src="content.js"></script>
 <script src="sections.js"></script>
 </body>
