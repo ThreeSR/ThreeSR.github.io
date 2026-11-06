@@ -13,9 +13,9 @@
     { id: "toolsmith", kind: "Paper", title: "ToolSmith",
       blurb: "A multimodal search agent grows its own verified, reusable Python tools from its failures.",
       href: "https://threesr.github.io/toolsmith/", art: "toolsmith" },
-    { id: "awesome", kind: "Paper list", title: "Awesome Multimodal Deep Research",
+    { id: "awesome-mmdr", kind: "Paper list", title: "Awesome Multimodal Deep Research",
       blurb: "A living map of multimodal deep research: methods, open training data, benchmarks and reported results.",
-      href: "https://threesr.github.io/awesome/", art: "awesome" },
+      href: "https://threesr.github.io/awesome-mmdr/", art: "awesome" },
     { id: "litesearcher", kind: "Release", title: "LiteSearcher",
       blurb: "Multimodal search agents at 0.8B, 2B and 4B, with open training data and trajectories.",
       href: "https://threesr.github.io/litesearcher/", art: "litesearcher" }

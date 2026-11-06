@@ -198,5 +198,5 @@
   var dlg = $("submit");
   $("submit-open").addEventListener("click", function () { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); });
   $("submit-close").addEventListener("click", function () { dlg.close ? dlg.close() : dlg.removeAttribute("open"); });
-  if (window.OVH_SERIES) OVH_SERIES.render($("more-grid"), "awesome");
+  if (window.OVH_SERIES) OVH_SERIES.render($("more-grid"), "awesome-mmdr");
 })();
