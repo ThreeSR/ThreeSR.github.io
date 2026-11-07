@@ -172,6 +172,12 @@ tr.sep td { font: 600 0.72rem var(--f-mono); letter-spacing: 0.08em; text-transf
 
 .chart { border: 1px solid var(--line); border-radius: 12px; padding: 16px 16px 8px; background: var(--surface); }
 .chart svg { display: block; width: 100%; height: auto; }
+.chart { position: relative; }
+.chart .pt { cursor: pointer; transition: r .12s ease, stroke-width .12s ease; }
+.chart .pt:hover, .chart .pt:focus { stroke: var(--ink-2, var(--ink)); stroke-width: 2.5; outline: none; }
+.chart .tip { position: absolute; pointer-events: none; z-index: 5; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 6px 9px; font: 12px/1.4 Inter, system-ui, sans-serif; box-shadow: 0 4px 14px rgba(0,0,0,.12); white-space: nowrap; opacity: 0; transition: opacity .1s ease; }
+.chart .tip b { font-weight: 600; }
+.chart .tip span { color: var(--ink-3); }
 .panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
 .panels .chart { min-width: 0; }
 
@@ -369,7 +375,7 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
       <div class="chart" id="pareto-mms" role="img" aria-label="MMSearch accuracy versus model size"></div>
       <div class="chart" id="pareto-bcvl" role="img" aria-label="BrowseComp-VL accuracy versus model size"></div>
     </div>
-    <figcaption>Accuracy (%) against total parameters (log scale). Blue: LiteSearcher. Filled grey: published agents at their SFT checkpoint, or the final model when it has no RL stage. Hollow grey: final model of agents whose paper reports no SFT-only result on that benchmark. Scores as reported in each paper. The line is the Pareto frontier over the filled points and LiteSearcher.</figcaption>
+    <figcaption>Accuracy (%) against total parameters (log scale). Blue: LiteSearcher. Filled grey: published agents at their SFT checkpoint, or the final model when it has no RL stage. Hollow grey: final model of agents whose paper reports no SFT-only result on that benchmark. Scores as reported in each paper; the 4B MMSearch-R1 and SenseNova-MARS points are the SSR authors' reproductions. The line is the Pareto frontier over the filled points and LiteSearcher.</figcaption>
   </figure>
 
   <figure>
@@ -508,20 +514,21 @@ python run_benchmark.py --config <span class="tbd">[TBD: release config]</span> 
   // [name, size (B), MMSearch, BrowseComp-VL, final-only flags]. SFT checkpoint where the paper reports one; f=[1,0]
   // marks a cell that is the final (RL) model because no SFT-only score is reported (drawn hollow, kept off the frontier).
   var pub = [
-    ["SSR-2B",2,51.18,null,[1,0]],["SSR-4B",4,61.40,null,[1,0]],["TAPO-4B",4,60.82,null,[1,0]],
-    ["WebWatcher-7B",7,49.1,21.2,[1,1]],["MMSearch-R1-7B",7,53.8,null,[1,0]],["DeepEyesV2-7B (SFT)",7,56.8,null,[0,0]],
-    ["SenseNova-MARS-8B",8,67.8,null,[1,0]],["Vision-DeepResearch-8B",8,69.6,42.6,[1,1]],["MM-DeepResearch-8B (SFT)",8,52.3,37.9,[0,1]],
-    ["POINTS-Seeker-8B (SFT)",8,66.1,39.8,[0,0]],["OpenSearch-VL-8B",8,64.5,37.6,[1,1]],["Visual-Seeker-8B",8,72.2,47.6,[0,0]],
-    ["SimpleSearch-VL-8B (SFT)",8,74.4,52.1,[0,1]],["DeepVoyager-VL-8B",8,72.7,58.4,[0,0]],["SearchEyes-9B",9,69.2,42.3,[1,1]],["Neos-9B (SFT)",9,79.7,60.4,[0,0]],
-    ["SearchEyes-27B",27,82.4,49.3,[1,1]],["Skywork-R1V4-30B-A3B",30,66.1,38.4,[0,0]],["Vision-DeepResearch-30B-A3B (SFT)",30,69.6,51.4,[1,0]],
-    ["REDSearcher-MM-30B-A3B (SFT)",30,70.3,55.3,[0,0]],["LMM-Searcher-30B-A3B",30,72.3,null,[0,0]],["OpenSearch-VL-30B-A3B",30,68.7,41.1,[1,1]],
-    ["SimpleSearch-VL-30B-A3B",30,83.6,55.9,[1,1]],["DeepVoyager-VL-30B-A3B",30,74.0,64.2,[0,0]],["WeAgent-MMSearch-30B-A3B (SFT)",30,74.85,null,[0,0]],
-    ["WebWatcher-32B",32,55.3,27.0,[1,1]],["SenseNova-MARS-32B",32,74.3,null,[1,0]],["MM-DeepResearch-32B",32,69.0,43.0,[1,1]],
-    ["OpenSearch-VL-32B",32,72.3,43.8,[1,1]],["UniBrowse-35B-A3B (SFT)",35,70.8,54.4,[0,0]],["MIRA-35B-A3B",35,80.7,58.4,[0,0]],["Neos-35B (SFT)",35,81.0,61.4,[0,0]]
+    ["SSR-2B",2,51.18,null,[1,0],"2610.01892"],["SSR-4B",4,61.40,null,[1,0],"2610.01892"],["TAPO + GSPO-4B",4,60.82,null,[1,0],"2606.05784"],["TAPO + GRPO-4B",4,54.97,null,[1,0],"2606.05784"],["TAPO + SAPO-4B",4,56.73,null,[1,0],"2606.05784"],
+    ["MMSearch-R1-4B",4,53.80,null,[1,0],"2506.20670"],["SenseNova-MARS-4B",4,44.05,null,[1,0],"2512.24330"],["Visual-ARFT-7B",7,34.50,null,[1,0],"2505.14246"],["TAPO + SAPO-8B",8,67.21,null,[1,0],"2606.05784"],["Qwen3-VL-8B-Instruct + SAPO",8,64.33,null,[1,0],"2610.01892"],
+    ["WebWatcher-7B",7,49.1,21.2,[1,1],"2508.05748"],["MMSearch-R1-7B",7,53.8,null,[1,0],"2506.20670"],["DeepEyesV2-7B (SFT)",7,56.8,null,[0,0],"2511.05271"],
+    ["SenseNova-MARS-8B",8,67.8,null,[1,0],"2512.24330"],["Vision-DeepResearch-8B",8,69.6,42.6,[1,1],"2601.22060"],["MM-DeepResearch-8B (SFT)",8,52.3,37.9,[0,1],"2603.01050"],
+    ["POINTS-Seeker-8B (SFT)",8,66.1,39.8,[0,0],"2604.14029"],["OpenSearch-VL-8B",8,64.5,37.6,[1,1],"2605.05185"],["Visual-Seeker-8B",8,72.2,47.6,[0,0],"2606.15231"],
+    ["SimpleSearch-VL-8B (SFT)",8,74.4,52.1,[0,1],"2606.31504"],["DeepVoyager-VL-8B",8,72.7,58.4,[0,0],"2608.01827"],["SearchEyes-9B",9,69.2,42.3,[1,1],"2607.05943"],["Neos-9B (SFT)",9,79.7,60.4,[0,0],"2610.17043"],
+    ["SearchEyes-27B",27,82.4,49.3,[1,1],"2607.05943"],["Skywork-R1V4-30B-A3B",30,66.1,38.4,[0,0],"2512.02395"],["Vision-DeepResearch-30B-A3B (SFT)",30,69.6,51.4,[1,0],"2601.22060"],
+    ["REDSearcher-MM-30B-A3B (SFT)",30,70.3,55.3,[0,0],"2602.14234"],["LMM-Searcher-30B-A3B",30,72.3,null,[0,0],"2604.12890"],["OpenSearch-VL-30B-A3B",30,68.7,41.1,[1,1],"2605.05185"],
+    ["SimpleSearch-VL-30B-A3B",30,83.6,55.9,[1,1],"2606.31504"],["DeepVoyager-VL-30B-A3B",30,74.0,64.2,[0,0],"2608.01827"],["WeAgent-MMSearch-30B-A3B (SFT)",30,74.85,null,[0,0],"2608.28062"],
+    ["WebWatcher-32B",32,55.3,27.0,[1,1],"2508.05748"],["SenseNova-MARS-32B",32,74.3,null,[1,0],"2512.24330"],["MM-DeepResearch-32B",32,69.0,43.0,[1,1],"2603.01050"],
+    ["OpenSearch-VL-32B",32,72.3,43.8,[1,1],"2605.05185"],["UniBrowse-35B-A3B (SFT)",35,70.8,54.4,[0,0],"2607.10557"],["MIRA-35B-A3B",35,80.7,58.4,[0,0],"2610.25926"],["Neos-35B (SFT)",35,81.0,61.4,[0,0],"2610.17043"]
   ];
   function draw(id, col, title, ymin, ymax) {
     var pts = ours.map(function (d) { return {n: d[0], x: d[1], y: d[col], o: 1}; })
-      .concat(pub.filter(function (d) { return d[col] != null; }).map(function (d) { return {n: d[0], x: d[1], y: d[col], o: 0, f: d[4][col - 2]}; }));
+      .concat(pub.filter(function (d) { return d[col] != null; }).map(function (d) { return {n: d[0], x: d[1], y: d[col], o: 0, f: d[4][col - 2], u: d[5]}; }));
     // Pareto frontier: walk by size, keep a point if it beats every smaller-or-equal point.
     var srt = pts.filter(function (p) { return !p.f; }).sort(function (a, b) { return a.x - b.x || b.y - a.y; }), best = -1, front = [];
     srt.forEach(function (p) { if (p.y > best) { best = p.y; front.push(p); } });
@@ -546,18 +553,50 @@ python run_benchmark.py --config <span class="tbd">[TBD: release config]</span> 
     });
     path += " H" + (W - R);
     s += '<path d="' + path + '" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 4"/>';
+    // nudge published points that sit on top of each other (same size, close scores) sideways so each stays hoverable
+    var placed = pts.filter(function (p) { return p.o; }).map(function (p) { return [lx(p.x), ly(p.y)]; });
+    pts.filter(function (p) { return !p.o; }).sort(function (a, b) { return a.x - b.x || a.y - b.y; }).forEach(function (p) {
+      var k = 0, i = 0, cx = lx(p.x), cy = ly(p.y);
+      while (placed.some(function (q) { return Math.hypot(q[0] - cx - k, q[1] - cy) < 9; })) { i++; k = (i % 2 ? 1 : -1) * 6 * Math.ceil(i / 2); }
+      p.dx = k; placed.push([cx + k, cy]);
+    });
     pts.filter(function (p) { return !p.o; }).forEach(function (p) {
-      s += '<circle cx="' + lx(p.x) + '" cy="' + ly(p.y) + '" r="4" ' + (p.f ? 'fill="none" stroke="var(--bar-base)" stroke-width="1.5"' : 'fill="var(--bar-base)"') + '><title>' + p.n + (p.f ? ' (final model)' : '') + ': ' + p.y + '</title></circle>';
+      s += '<a href="https://arxiv.org/abs/' + p.u + '" target="_blank" rel="noopener" aria-label="' + p.n + ', ' + p.y + '"><circle class="pt" data-n="' + p.n + '" data-y="' + p.y + '" data-x="' + p.x + '" data-k="' + (p.f ? "final model, no SFT-only score" : "SFT checkpoint") + '" cx="' + (lx(p.x) + p.dx) + '" cy="' + ly(p.y) + '" r="4.5" ' + (p.f ? 'fill="var(--surface)" stroke="var(--bar-base)" stroke-width="1.5"' : 'fill="var(--bar-base)" stroke="var(--bar-base)" stroke-width="1"') + '/></a>';
     });
     var oursPts = pts.filter(function (p) { return p.o; });
     s += '<polyline points="' + oursPts.map(function (p) { return lx(p.x) + "," + ly(p.y); }).join(" ") + '" fill="none" stroke="var(--blue)" stroke-width="2"/>';
     oursPts.forEach(function (p) {
-      s += '<circle cx="' + lx(p.x) + '" cy="' + ly(p.y) + '" r="5.5" fill="var(--blue)" stroke="var(--bg)" stroke-width="1.5"><title>' + p.n + ': ' + p.y + '</title></circle>';
+      s += '<circle class="pt" data-n="' + p.n + '" data-y="' + p.y + '" data-x="' + p.x + '" data-k="ours, SFT only" cx="' + lx(p.x) + '" cy="' + ly(p.y) + '" r="5.5" fill="var(--blue)" stroke="var(--bg)" stroke-width="1.5"/>';
       s += '<text x="' + (lx(p.x) - 8) + '" y="' + (ly(p.y) - 9) + '" text-anchor="middle" fill="var(--blue)" font-weight="600">' + p.n.replace("LiteSearcher-", "") + '</text>';
     });
-    document.getElementById(id).innerHTML = s + "</svg>";
+    var el = document.getElementById(id);
+    el.innerHTML = s + '</svg><div class="tip" role="tooltip"></div>';
+    var tip = el.querySelector(".tip");
+    var armed = null;
+    function show(c) {
+      tip.innerHTML = "<b>" + c.dataset.n + "</b><br>" + title + " " + c.dataset.y + " <span>&middot; " + c.dataset.k + "</span>";
+      var cr = c.getBoundingClientRect(), er = el.getBoundingClientRect();
+      tip.style.opacity = 1;
+      var left = cr.left - er.left + cr.width / 2 - tip.offsetWidth / 2;
+      tip.style.left = Math.max(4, Math.min(el.clientWidth - tip.offsetWidth - 4, left)) + "px";
+      tip.style.top = (cr.top - er.top - tip.offsetHeight - 8) + "px";
+    }
+    el.querySelectorAll(".pt").forEach(function (c) {
+      c.addEventListener("mouseenter", function () { show(c); });
+      c.addEventListener("focus", function () { show(c); });
+      c.addEventListener("mouseleave", function () { tip.style.opacity = 0; });
+      c.addEventListener("blur", function () { tip.style.opacity = 0; });
+      // touch screens have no hover: the first tap shows the label, a second tap on the same point opens the paper
+      c.addEventListener("click", function (e) {
+        if (!window.matchMedia("(hover: none)").matches) return;
+        if (armed !== c) { e.preventDefault(); armed = c; show(c); }
+      });
+    });
+    document.addEventListener("click", function (e) {
+      if (armed && !el.contains(e.target)) { armed = null; tip.style.opacity = 0; }
+    });
   }
-  draw("pareto-mms", 2, "MMSearch", 40, 100);
+  draw("pareto-mms", 2, "MMSearch", 30, 90);
   draw("pareto-bcvl", 3, "BrowseComp-VL", 20, 80);
 })();
 </script>
