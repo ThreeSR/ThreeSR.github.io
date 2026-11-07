@@ -297,8 +297,8 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
     <div class="kicker">TL;DR</div>
     <ul>
       <li>We release three small multimodal search agents, <b>LiteSearcher-0.8B, 2B and 4B</b>, fine-tuned from Qwen3.5 on multimodal search trajectories, and we open 13k of those trajectories.</li>
-      <li><b>LiteSearcher-4B</b> scores <b>71.35</b> on MMSearch and <b>47.37</b> on BrowseComp-VL, above most published 7B to 9B search agents and several 30B-class ones.</li>
-      <li><b>LiteSearcher-0.8B</b> reaches <b>54.97</b> on MMSearch, above MMSearch-R1-7B and WebWatcher-7B.</li>
+      <li><b>LiteSearcher-4B</b> scores <b>71.35</b> on MMSearch and <b>47.37</b> on BrowseComp-VL. Compared with published SFT checkpoints, before any RL, it is ahead of DeepEyesV2-7B, MM-DeepResearch-8B and POINTS-Seeker-8B on MMSearch, and level with the SFT-only Visual-Seeker-8B (72.2 and 47.6) at half the size.</li>
+      <li><b>LiteSearcher-0.8B</b> reaches <b>54.97</b> on MMSearch, above the SFT checkpoint of MM-DeepResearch-8B (52.3).</li>
       <li>We release the weights right after SFT, with no RL on top, so groups can skip the costly data collection and SFT stage and start their own RL from a policy that already knows how to search.</li>
       <li>Everything runs on <a href="https://github.com/uclanlp/OpenVLHarness">OpenVLHarness</a>: the same harness, tools and prompts we trained with, so the numbers here are reproducible end to end.</li>
     </ul>
@@ -363,13 +363,13 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
   <p>Before training, Qwen3.5-0.8B barely uses its tools. On MMSearch-Plus the median episode makes one tool call, and 85 of 311 episodes make none. Fine-tuning turns it into an agent that searches over many turns, and MMSearch rises from 30.41 to 54.97. At 2B the gain is +17.5 points on MMSearch and +11.5 on BrowseComp-VL. At 4B the untrained model is already a capable tool user: fine-tuning still pays off on the harder MMSearch-Plus (19.29 to 22.51), while on MMSearch and BrowseComp-VL the base model in our harness is level with the fine-tuned one. The stronger the base model, the less SFT adds, which is why a strong model can skip SFT and go straight to RL.</p>
 
   <h3>On the accuracy-size Pareto frontier</h3>
-  <p>Plotting every published multimodal search agent by size and accuracy, the three LiteSearcher models define the frontier below 7B, and each step up the ladder adds accuracy. The 4B model is above most published 8B agents on both benchmarks, and above several 30B-class agents such as OpenSearch-VL-30B-A3B, MM-DeepResearch-32B and WebWatcher-32B.</p>
+  <p>LiteSearcher is trained with SFT only, so we compare it with other agents at their SFT checkpoints, before any RL, wherever the paper reports one. Agents that report no SFT-only result are shown at their final scores and left out of the frontier. Below 7B the three LiteSearcher models are the only points, and each step up the ladder adds accuracy. On MMSearch the 4B model is ahead of the SFT checkpoints of DeepEyesV2-7B, MM-DeepResearch-8B and POINTS-Seeker-8B, and of the 30B-class REDSearcher-MM-30B-A3B (70.3) and UniBrowse-35B-A3B (70.8). The strongest SFT checkpoints, DeepVoyager-VL and Neos, stay ahead, most clearly on BrowseComp-VL.</p>
   <figure>
     <div class="panels">
       <div class="chart" id="pareto-mms" role="img" aria-label="MMSearch accuracy versus model size"></div>
       <div class="chart" id="pareto-bcvl" role="img" aria-label="BrowseComp-VL accuracy versus model size"></div>
     </div>
-    <figcaption>Accuracy (%) against total parameters (log scale). Blue: LiteSearcher. Grey: published agents, scores as reported in their papers. The line is the Pareto frontier.</figcaption>
+    <figcaption>Accuracy (%) against total parameters (log scale). Blue: LiteSearcher. Filled grey: published agents at their SFT checkpoint, or the final model when it has no RL stage. Hollow grey: final model of agents whose paper reports no SFT-only result on that benchmark. Scores as reported in each paper. The line is the Pareto frontier over the filled points and LiteSearcher.</figcaption>
   </figure>
 
   <figure>
@@ -380,23 +380,26 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
         <tr class="ours"><td>LiteSearcher</td><td>0.8B</td><td>54.97</td><td>28.32</td><td>12.22</td></tr>
         <tr class="ours"><td>LiteSearcher</td><td>2B</td><td>61.40</td><td>38.35</td><td>15.76</td></tr>
         <tr class="ours"><td>LiteSearcher</td><td>4B</td><td>71.35</td><td>47.37</td><td>22.51</td></tr>
-        <tr class="sep"><td colspan="5">Published agents, 7B to 9B</td></tr>
-        <tr><td>WebWatcher</td><td>7B</td><td>49.1</td><td>21.2</td><td>–</td></tr>
-        <tr><td>MMSearch-R1</td><td>7B</td><td>53.8</td><td>–</td><td>–</td></tr>
-        <tr><td>DeepEyesV2</td><td>7B</td><td>63.7</td><td>–</td><td>–</td></tr>
-        <tr><td>OpenSearch-VL</td><td>8B</td><td>64.5</td><td>37.6</td><td>–</td></tr>
-        <tr><td>MM-DeepResearch</td><td>8B</td><td>67.8</td><td>37.9</td><td>–</td></tr>
-        <tr><td>SearchEyes</td><td>9B</td><td>69.2</td><td>42.3</td><td>–</td></tr>
-        <tr><td>Vision-DeepResearch</td><td>8B</td><td>69.6</td><td>42.6</td><td>20.4</td></tr>
-        <tr><td>POINTS-Seeker</td><td>8B</td><td>70.8</td><td>44.4</td><td>25.2</td></tr>
-        <tr class="sep"><td colspan="5">Published agents, 30B class</td></tr>
-        <tr><td>WebWatcher</td><td>32B</td><td>55.3</td><td>27.0</td><td>–</td></tr>
+        <tr class="sep"><td colspan="5">Published SFT checkpoints, 7B to 9B</td></tr>
+        <tr><td>DeepEyesV2</td><td>7B</td><td>56.8</td><td>–</td><td>–</td></tr>
+        <tr><td>MM-DeepResearch</td><td>8B</td><td>52.3</td><td>–</td><td>–</td></tr>
+        <tr><td>POINTS-Seeker</td><td>8B</td><td>66.1</td><td>39.8</td><td>23.0</td></tr>
+        <tr><td>Visual-Seeker</td><td>8B</td><td>72.2</td><td>47.6</td><td>27.3</td></tr>
+        <tr><td>DeepVoyager-VL</td><td>8B</td><td>72.7</td><td>58.4</td><td>37.1</td></tr>
+        <tr><td>SimpleSearch-VL</td><td>8B</td><td>74.4</td><td>–</td><td>–</td></tr>
+        <tr><td>Neos</td><td>9B</td><td>79.7</td><td>60.4</td><td>44.7</td></tr>
+        <tr class="sep"><td colspan="5">Published SFT checkpoints, 30B class</td></tr>
         <tr><td>Skywork-R1V4</td><td>30B-A3B</td><td>66.1</td><td>38.4</td><td>–</td></tr>
-        <tr><td>OpenSearch-VL</td><td>30B-A3B</td><td>68.7</td><td>41.1</td><td>–</td></tr>
-        <tr><td>MM-DeepResearch</td><td>32B</td><td>69.0</td><td>43.0</td><td>–</td></tr>
+        <tr><td>REDSearcher-MM</td><td>30B-A3B</td><td>70.3</td><td>55.3</td><td>20.2</td></tr>
+        <tr><td>Vision-DeepResearch</td><td>30B-A3B</td><td>–</td><td>51.4</td><td>26.0</td></tr>
+        <tr><td>DeepVoyager-VL</td><td>30B-A3B</td><td>74.0</td><td>64.2</td><td>40.6</td></tr>
+        <tr><td>WeAgent-MMSearch</td><td>30B-A3B</td><td>74.85</td><td>–</td><td>31.00</td></tr>
+        <tr><td>UniBrowse</td><td>35B-A3B</td><td>70.8</td><td>54.4</td><td>32.6</td></tr>
+        <tr><td>MIRA</td><td>35B-A3B</td><td>80.7</td><td>58.4</td><td>38.9</td></tr>
+        <tr><td>Neos</td><td>35B-A3B</td><td>81.0</td><td>61.4</td><td>48.6</td></tr>
       </tbody>
     </table></div>
-    <figcaption>Accuracy (%). <span class="tbd">[TBD: pick which comparison rows to keep for the final post]</span></figcaption>
+    <figcaption>Accuracy (%). Published agents at their SFT checkpoint, before any RL, as reported in each paper; Visual-Seeker, DeepVoyager-VL, Skywork-R1V4 and MIRA have no RL stage. A dash means the paper reports no SFT-only score on that benchmark.</figcaption>
   </figure>
 
   <h2 id="tool-use">How the agents use their tools</h2>
@@ -456,22 +459,24 @@ python run_benchmark.py --config <span class="tbd">[TBD: release config]</span> 
 (function () {
   // [name, total params (B), score]; ours flagged with 1. Published values as reported (paper Table 1 quoted rows).
   var ours = [["LiteSearcher-0.8B", 0.8, 54.97, 28.32], ["LiteSearcher-2B", 2, 61.40, 38.35], ["LiteSearcher-4B", 4, 71.35, 47.37]];
+  // [name, size (B), MMSearch, BrowseComp-VL, final-only flags]. SFT checkpoint where the paper reports one; f=[1,0]
+  // marks a cell that is the final (RL) model because no SFT-only score is reported (drawn hollow, kept off the frontier).
   var pub = [
-    ["WebWatcher-7B",7,49.1,21.2],["MMSearch-R1-7B",7,53.8,null],["DeepEyesV2-7B",7,63.7,null],
-    ["SenseNova-MARS-8B",8,67.8,null],["Vision-DeepResearch-8B",8,69.6,42.6],["MM-DeepResearch-8B",8,67.8,37.9],
-    ["POINTS-Seeker-8B",8,70.8,44.4],["OpenSearch-VL-8B",8,64.5,37.6],["Visual-Seeker-8B",8,72.2,47.6],
-    ["SimpleSearch-VL-8B",8,77.1,52.1],["DeepVoyager-VL-8B",8,72.7,58.4],["SearchEyes-9B",9,69.2,42.3],["Neos-9B",9,81.3,63.2],
-    ["SearchEyes-27B",27,82.4,49.3],["Skywork-R1V4-30B-A3B",30,66.1,38.4],["Vision-DeepResearch-30B-A3B",30,69.6,53.7],
-    ["REDSearcher-MM-30B-A3B",30,72.9,57.2],["LMM-Searcher-30B-A3B",30,72.3,null],["OpenSearch-VL-30B-A3B",30,68.7,41.1],
-    ["SimpleSearch-VL-30B-A3B",30,83.6,55.9],["DeepVoyager-VL-30B-A3B",30,74.0,64.2],["WeAgent-MMSearch-30B-A3B",30,77.8,null],
-    ["WebWatcher-32B",32,55.3,27.0],["SenseNova-MARS-32B",32,74.3,null],["MM-DeepResearch-32B",32,69.0,43.0],
-    ["OpenSearch-VL-32B",32,72.3,43.8],["UniBrowse-35B-A3B",35,75.2,57.8],["MIRA-35B-A3B",35,80.7,58.4],["Neos-35B",35,83.7,66.4]
+    ["WebWatcher-7B",7,49.1,21.2,[1,1]],["MMSearch-R1-7B",7,53.8,null,[1,0]],["DeepEyesV2-7B (SFT)",7,56.8,null,[0,0]],
+    ["SenseNova-MARS-8B",8,67.8,null,[1,0]],["Vision-DeepResearch-8B",8,69.6,42.6,[1,1]],["MM-DeepResearch-8B (SFT)",8,52.3,37.9,[0,1]],
+    ["POINTS-Seeker-8B (SFT)",8,66.1,39.8,[0,0]],["OpenSearch-VL-8B",8,64.5,37.6,[1,1]],["Visual-Seeker-8B",8,72.2,47.6,[0,0]],
+    ["SimpleSearch-VL-8B (SFT)",8,74.4,52.1,[0,1]],["DeepVoyager-VL-8B",8,72.7,58.4,[0,0]],["SearchEyes-9B",9,69.2,42.3,[1,1]],["Neos-9B (SFT)",9,79.7,60.4,[0,0]],
+    ["SearchEyes-27B",27,82.4,49.3,[1,1]],["Skywork-R1V4-30B-A3B",30,66.1,38.4,[0,0]],["Vision-DeepResearch-30B-A3B (SFT)",30,69.6,51.4,[1,0]],
+    ["REDSearcher-MM-30B-A3B (SFT)",30,70.3,55.3,[0,0]],["LMM-Searcher-30B-A3B",30,72.3,null,[0,0]],["OpenSearch-VL-30B-A3B",30,68.7,41.1,[1,1]],
+    ["SimpleSearch-VL-30B-A3B",30,83.6,55.9,[1,1]],["DeepVoyager-VL-30B-A3B",30,74.0,64.2,[0,0]],["WeAgent-MMSearch-30B-A3B (SFT)",30,74.85,null,[0,0]],
+    ["WebWatcher-32B",32,55.3,27.0,[1,1]],["SenseNova-MARS-32B",32,74.3,null,[1,0]],["MM-DeepResearch-32B",32,69.0,43.0,[1,1]],
+    ["OpenSearch-VL-32B",32,72.3,43.8,[1,1]],["UniBrowse-35B-A3B (SFT)",35,70.8,54.4,[0,0]],["MIRA-35B-A3B",35,80.7,58.4,[0,0]],["Neos-35B (SFT)",35,81.0,61.4,[0,0]]
   ];
   function draw(id, col, title, ymin, ymax) {
     var pts = ours.map(function (d) { return {n: d[0], x: d[1], y: d[col], o: 1}; })
-      .concat(pub.filter(function (d) { return d[col] != null; }).map(function (d) { return {n: d[0], x: d[1], y: d[col], o: 0}; }));
+      .concat(pub.filter(function (d) { return d[col] != null; }).map(function (d) { return {n: d[0], x: d[1], y: d[col], o: 0, f: d[4][col - 2]}; }));
     // Pareto frontier: walk by size, keep a point if it beats every smaller-or-equal point.
-    var srt = pts.slice().sort(function (a, b) { return a.x - b.x || b.y - a.y; }), best = -1, front = [];
+    var srt = pts.filter(function (p) { return !p.f; }).sort(function (a, b) { return a.x - b.x || b.y - a.y; }), best = -1, front = [];
     srt.forEach(function (p) { if (p.y > best) { best = p.y; front.push(p); } });
     var W = 360, H = 280, L = 40, R = 14, T = 30, B = 36;
     var lx = function (v) { return L + (W - L - R) * (Math.log(v) - Math.log(0.6)) / (Math.log(45) - Math.log(0.6)); };
@@ -495,7 +500,7 @@ python run_benchmark.py --config <span class="tbd">[TBD: release config]</span> 
     path += " H" + (W - R);
     s += '<path d="' + path + '" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 4"/>';
     pts.filter(function (p) { return !p.o; }).forEach(function (p) {
-      s += '<circle cx="' + lx(p.x) + '" cy="' + ly(p.y) + '" r="4" fill="var(--bar-base)"><title>' + p.n + ': ' + p.y + '</title></circle>';
+      s += '<circle cx="' + lx(p.x) + '" cy="' + ly(p.y) + '" r="4" ' + (p.f ? 'fill="none" stroke="var(--bar-base)" stroke-width="1.5"' : 'fill="var(--bar-base)"') + '><title>' + p.n + (p.f ? ' (final model)' : '') + ': ' + p.y + '</title></circle>';
     });
     var oursPts = pts.filter(function (p) { return p.o; });
     s += '<polyline points="' + oursPts.map(function (p) { return lx(p.x) + "," + ly(p.y); }).join(" ") + '" fill="none" stroke="var(--blue)" stroke-width="2"/>';
