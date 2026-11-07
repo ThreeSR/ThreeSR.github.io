@@ -4,7 +4,7 @@
 
   /* Extra benchmarks. null = still running (shown as TBD). Fill measured numbers only. */
   var MORE_BENCH = {
-    vqa: { cols: ["SimpleVQA", "WorldVQA", "FVQA", "InfoSeek"], keys: ["SimpleVQA_EN", "WorldVQA_VDR300", "FVQA_VDR300", "Infoseek_VDR300"] },
+    vqa: { cols: ["SimpleVQA", "WorldVQA", "FVQA"], keys: ["SimpleVQA_EN", "WorldVQA_VDR300", "FVQA_VDR300"] },
     dr:  { cols: ["MM-BrowseComp", "BrowseComp-V3", "VDR-Bench", "HR-MMSearch", "RealX-Bench", "HLE"], keys: ["MMBrowseComp", "BrowseCompV3", "VDRBench", "HRMMSearch", "RealXBench", "hle"] },
     rows: [
       ["Qwen3.5-0.8B", "Direct Answer", {}], ["Qwen3.5-0.8B", "Agent Workflow", { SimpleVQA_EN: 48.67, FVQA_VDR300: 32.33 }], ["LiteSearcher-0.8B", "SFT", { SimpleVQA_EN: 57.00 }],

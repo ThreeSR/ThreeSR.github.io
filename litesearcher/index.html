@@ -363,7 +363,7 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
   <p>Before training, Qwen3.5-0.8B barely uses its tools. On MMSearch-Plus the median episode makes one tool call, and 85 of 311 episodes make none. Fine-tuning turns it into an agent that searches over many turns, and MMSearch rises from 30.41 to 54.97. At 2B the gain is +17.5 points on MMSearch and +11.5 on BrowseComp-VL. At 4B the untrained model is already a capable tool user: fine-tuning still pays off on the harder MMSearch-Plus (19.29 to 22.51), while on MMSearch and BrowseComp-VL the base model in our harness is level with the fine-tuned one. The stronger the base model, the less SFT adds, which is why a strong model can skip SFT and go straight to RL.</p>
 
   <h3>On the accuracy-size Pareto frontier</h3>
-  <p>LiteSearcher is trained with SFT only, so we compare it with other agents at their SFT checkpoints, before any RL, wherever the paper reports one. Agents that report no SFT-only result are shown at their final scores and left out of the frontier. Below 7B the three LiteSearcher models are the only points, and each step up the ladder adds accuracy. On MMSearch the 4B model is ahead of the SFT checkpoints of DeepEyesV2-7B, MM-DeepResearch-8B and POINTS-Seeker-8B, and of the 30B-class REDSearcher-MM-30B-A3B (70.3) and UniBrowse-35B-A3B (70.8). The strongest SFT checkpoints, DeepVoyager-VL and Neos, stay ahead, most clearly on BrowseComp-VL.</p>
+  <p>LiteSearcher is trained with SFT only, so we compare it with other agents at their SFT checkpoints, before any RL, wherever the paper reports one. Agents that report no SFT-only result are shown at their final scores and left out of the frontier. Below 7B the only other points are RL-trained agents, which report no SFT-only score per benchmark: on MMSearch LiteSearcher-4B is above all of them, and LiteSearcher-2B is level with SSR-4B. On MMSearch the 4B model is ahead of the SFT checkpoints of DeepEyesV2-7B, MM-DeepResearch-8B and POINTS-Seeker-8B, and of the 30B-class REDSearcher-MM-30B-A3B (70.3) and UniBrowse-35B-A3B (70.8). The strongest SFT checkpoints, DeepVoyager-VL and Neos, stay ahead, most clearly on BrowseComp-VL.</p>
   <figure>
     <div class="panels">
       <div class="chart" id="pareto-mms" role="img" aria-label="MMSearch accuracy versus model size"></div>
@@ -400,6 +400,52 @@ code { font-family: var(--f-mono); font-size: 0.88em; }
       </tbody>
     </table></div>
     <figcaption>Accuracy (%). Published agents at their SFT checkpoint, before any RL, as reported in each paper; Visual-Seeker, DeepVoyager-VL, Skywork-R1V4 and MIRA have no RL stage. A dash means the paper reports no SFT-only score on that benchmark.</figcaption>
+  </figure>
+
+  <h3 id="small-agents">Against agents of 4B and below</h3>
+  <p>SSR compares a set of small trained search agents on seven benchmarks, all built on Qwen3-VL and trained with RL. We add LiteSearcher on four of those benchmarks. On MMSearch, LiteSearcher-4B (71.35) is ahead of every trained agent in that comparison, including those from 7B to 30B, and LiteSearcher-2B (61.40) is level with SSR-4B (61.40). LiteSearcher-4B also leads the trained agents on HR-MMSearch, FVQA and SimpleVQA.</p>
+  <figure>
+    <div class="scroll"><table>
+      <thead><tr><th>Method</th><th>Size</th><th>MMSearch</th><th>HR-MMSearch</th><th>FVQA</th><th>SimpleVQA</th><th>LiveVQA</th><th>MAT-Search</th><th>InfoSeek</th><th>Avg</th></tr></thead>
+      <tbody>
+        <tr class="sep"><td colspan="10">LiteSearcher (ours), SFT only</td></tr>
+        <tr class="ours"><td>LiteSearcher</td><td>0.8B</td><td>54.97</td><td>19.02</td><td>55.67</td><td>57.00</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+        <tr class="ours"><td>LiteSearcher</td><td>2B</td><td>61.40</td><td>32.79</td><td>68.67</td><td>65.00</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+        <tr class="ours"><td>LiteSearcher</td><td>4B</td><td>71.35</td><td>41.97</td><td>72.67</td><td>75.33</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+        <tr class="sep"><td colspan="10">Agentic models: trained, 4B and below</td></tr>
+        <tr><td>MMSearch-R1*</td><td>4B</td><td>53.80</td><td>25.50</td><td>67.20</td><td>68.50</td><td>50.60</td><td>78.00</td><td>60.00</td><td>57.66</td></tr>
+        <tr><td>SenseNova-MARS*</td><td>4B</td><td>44.05</td><td>24.67</td><td>57.19</td><td>65.55</td><td>43.06</td><td>78.67</td><td>48.40</td><td>51.65</td></tr>
+        <tr><td>TAPO + GRPO</td><td>4B</td><td>54.97</td><td>33.11</td><td>65.56</td><td>68.31</td><td>54.05</td><td>82.00</td><td>58.85</td><td>59.55</td></tr>
+        <tr><td>TAPO + GSPO</td><td>4B</td><td>60.82</td><td>31.48</td><td>66.61</td><td>70.98</td><td>56.14</td><td>83.33</td><td>59.40</td><td>61.25</td></tr>
+        <tr><td>TAPO + SAPO</td><td>4B</td><td>56.73</td><td>31.48</td><td>67.17</td><td>71.27</td><td>55.36</td><td>81.33</td><td>59.95</td><td>60.47</td></tr>
+        <tr><td>SSR</td><td>4B</td><td>61.40</td><td>30.16</td><td>70.22</td><td>71.08</td><td>57.19</td><td>78.67</td><td>60.90</td><td>61.37</td></tr>
+        <tr><td>SSR</td><td>2B</td><td>51.18</td><td>17.06</td><td>61.16</td><td>61.83</td><td>51.54</td><td>62.59</td><td>53.44</td><td>51.26</td></tr>
+        <tr class="sep"><td colspan="10">Agentic models: trained, 7B and above</td></tr>
+        <tr><td>Skywork-R1V4</td><td>30B</td><td>66.10</td><td>–</td><td>67.20</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+        <tr><td>SenseNova-MARS</td><td>8B</td><td>66.67</td><td>40.33</td><td>67.11</td><td>70.19</td><td>56.22</td><td>83.33</td><td>61.70</td><td>63.65</td></tr>
+        <tr><td>TAPO + SAPO</td><td>8B</td><td>67.21</td><td>40.66</td><td>69.89</td><td>73.64</td><td>59.71</td><td>82.67</td><td>62.70</td><td>65.21</td></tr>
+        <tr><td>Qwen3-VL-8B-Instruct + SAPO</td><td>8B</td><td>64.33</td><td>38.69</td><td>65.61</td><td>70.38</td><td>56.86</td><td>82.00</td><td>59.55</td><td>62.48</td></tr>
+        <tr><td>Visual-ARFT</td><td>7B</td><td>34.50</td><td>24.92</td><td>41.72</td><td>42.45</td><td>25.40</td><td>74.00</td><td>37.95</td><td>40.13</td></tr>
+        <tr><td>DeepMMSearch-R1</td><td>7B</td><td>–</td><td>–</td><td>–</td><td>55.87</td><td>–</td><td>–</td><td>47.51</td><td>–</td></tr>
+        <tr><td>MMSearch-R1</td><td>7B</td><td>53.80</td><td>20.33</td><td>58.40</td><td>57.40</td><td>48.40</td><td>74.00</td><td>55.10</td><td>52.49</td></tr>
+        <tr><td>DeepEyesV2</td><td>7B</td><td>63.70</td><td>–</td><td>60.60</td><td>59.40</td><td>–</td><td>–</td><td>51.10</td><td>–</td></tr>
+        <tr class="sep"><td colspan="10">Agentic models: zero-shot, open-source</td></tr>
+        <tr><td>Qwen3-VL-32B-Instruct</td><td>32B</td><td>49.12</td><td>34.43</td><td>54.28</td><td>64.17</td><td>42.87</td><td>82.00</td><td>49.85</td><td>53.82</td></tr>
+        <tr><td>Qwen2.5-VL-32B-Instruct</td><td>32B</td><td>49.71</td><td>33.44</td><td>52.22</td><td>65.15</td><td>42.17</td><td>81.33</td><td>50.10</td><td>53.45</td></tr>
+        <tr><td>Qwen3-VL-8B-Instruct</td><td>8B</td><td>47.37</td><td>27.87</td><td>53.61</td><td>62.29</td><td>39.37</td><td>82.67</td><td>46.15</td><td>51.33</td></tr>
+        <tr><td>Qwen2.5-VL-7B-Instruct</td><td>7B</td><td>32.16</td><td>19.34</td><td>36.00</td><td>42.35</td><td>22.52</td><td>67.33</td><td>28.80</td><td>35.50</td></tr>
+        <tr><td>Qwen3-VL-4B-Instruct</td><td>4B</td><td>43.86</td><td>25.57</td><td>50.50</td><td>63.57</td><td>37.34</td><td>79.33</td><td>43.25</td><td>49.06</td></tr>
+        <tr><td>Qwen3-VL-2B-Instruct</td><td>2B</td><td>32.35</td><td>20.00</td><td>42.90</td><td>49.16</td><td>31.69</td><td>70.47</td><td>33.20</td><td>39.97</td></tr>
+        <tr class="sep"><td colspan="10">Agentic models: zero-shot, proprietary</td></tr>
+        <tr><td>GPT-4o-mini</td><td>–</td><td>38.60</td><td>26.23</td><td>50.00</td><td>50.84</td><td>31.54</td><td>80.00</td><td>42.35</td><td>45.65</td></tr>
+        <tr><td>GPT-4o</td><td>–</td><td>49.12</td><td>30.16</td><td>66.34</td><td>63.67</td><td>40.09</td><td>76.67</td><td>59.55</td><td>55.09</td></tr>
+        <tr><td>GPT-5</td><td>–</td><td>52.63</td><td>38.36</td><td>62.61</td><td>70.58</td><td>56.02</td><td>84.67</td><td>55.95</td><td>60.12</td></tr>
+        <tr><td>Gemini-3-Flash</td><td>–</td><td>62.57</td><td>41.64</td><td>64.89</td><td>67.92</td><td>48.06</td><td>82.67</td><td>61.10</td><td>61.26</td></tr>
+        <tr><td>GPT-5.2</td><td>–</td><td>66.08</td><td>48.20</td><td>68.78</td><td>78.18</td><td>65.99</td><td>80.67</td><td>65.55</td><td>67.64</td></tr>
+        <tr><td>Gemini-3-Pro</td><td>–</td><td>74.27</td><td>48.52</td><td>72.61</td><td>75.91</td><td>59.69</td><td>86.00</td><td>66.45</td><td>69.06</td></tr>
+      </tbody>
+    </table></div>
+    <figcaption>Accuracy (%). Published rows are copied from Table 1 of SSR (<a href="https://arxiv.org/abs/2610.01892">arXiv 2610.01892</a>); * marks results the SSR authors reproduced. All trained agents listed there are final models after RL; SSR reports only a seven-benchmark average for its SFT-only 4B model (54.57). Avg is the mean over the seven benchmarks, so it is left blank for LiteSearcher, which is reported on four of them.</figcaption>
   </figure>
 
   <h2 id="tool-use">How the agents use their tools</h2>
@@ -462,6 +508,7 @@ python run_benchmark.py --config <span class="tbd">[TBD: release config]</span> 
   // [name, size (B), MMSearch, BrowseComp-VL, final-only flags]. SFT checkpoint where the paper reports one; f=[1,0]
   // marks a cell that is the final (RL) model because no SFT-only score is reported (drawn hollow, kept off the frontier).
   var pub = [
+    ["SSR-2B",2,51.18,null,[1,0]],["SSR-4B",4,61.40,null,[1,0]],["TAPO-4B",4,60.82,null,[1,0]],
     ["WebWatcher-7B",7,49.1,21.2,[1,1]],["MMSearch-R1-7B",7,53.8,null,[1,0]],["DeepEyesV2-7B (SFT)",7,56.8,null,[0,0]],
     ["SenseNova-MARS-8B",8,67.8,null,[1,0]],["Vision-DeepResearch-8B",8,69.6,42.6,[1,1]],["MM-DeepResearch-8B (SFT)",8,52.3,37.9,[0,1]],
     ["POINTS-Seeker-8B (SFT)",8,66.1,39.8,[0,0]],["OpenSearch-VL-8B",8,64.5,37.6,[1,1]],["Visual-Seeker-8B",8,72.2,47.6,[0,0]],
